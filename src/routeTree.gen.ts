@@ -10,33 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
+import { Route as CopywriterRouteImport } from './routes/copywriter'
+import { Route as NovaOfertaRouteImport } from './routes/nova-oferta'
+import { Route as TemplatesRouteImport } from './routes/templates'
+import { Route as EmBreveSlugRouteImport } from './routes/em-breve.$slug'
+import { Route as OfertasIndexRouteImport } from './routes/ofertas.index'
+import { Route as OfertasIdRouteImport } from './routes/ofertas.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConfiguracoesRoute = ConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CopywriterRoute = CopywriterRouteImport.update({
+  id: '/copywriter',
+  path: '/copywriter',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NovaOfertaRoute = NovaOfertaRouteImport.update({
+  id: '/nova-oferta',
+  path: '/nova-oferta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TemplatesRoute = TemplatesRouteImport.update({
+  id: '/templates',
+  path: '/templates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmBreveSlugRoute = EmBreveSlugRouteImport.update({
+  id: '/em-breve/$slug',
+  path: '/em-breve/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfertasIndexRoute = OfertasIndexRouteImport.update({
+  id: '/ofertas/',
+  path: '/ofertas/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfertasIdRoute = OfertasIdRouteImport.update({
+  id: '/ofertas/$id',
+  path: '/ofertas/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/configuracoes': typeof ConfiguracoesRoute
+  '/copywriter': typeof CopywriterRoute
+  '/nova-oferta': typeof NovaOfertaRoute
+  '/templates': typeof TemplatesRoute
+  '/em-breve/$slug': typeof EmBreveSlugRoute
+  '/ofertas/$id': typeof OfertasIdRoute
+  '/ofertas/': typeof OfertasIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/configuracoes': typeof ConfiguracoesRoute
+  '/copywriter': typeof CopywriterRoute
+  '/nova-oferta': typeof NovaOfertaRoute
+  '/templates': typeof TemplatesRoute
+  '/em-breve/$slug': typeof EmBreveSlugRoute
+  '/ofertas/$id': typeof OfertasIdRoute
+  '/ofertas': typeof OfertasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/configuracoes': typeof ConfiguracoesRoute
+  '/copywriter': typeof CopywriterRoute
+  '/nova-oferta': typeof NovaOfertaRoute
+  '/templates': typeof TemplatesRoute
+  '/em-breve/$slug': typeof EmBreveSlugRoute
+  '/ofertas/$id': typeof OfertasIdRoute
+  '/ofertas/': typeof OfertasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/configuracoes'
+    | '/copywriter'
+    | '/nova-oferta'
+    | '/templates'
+    | '/em-breve/$slug'
+    | '/ofertas/$id'
+    | '/ofertas/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/configuracoes'
+    | '/copywriter'
+    | '/nova-oferta'
+    | '/templates'
+    | '/em-breve/$slug'
+    | '/ofertas/$id'
+    | '/ofertas'
+  id:
+    | '__root__'
+    | '/'
+    | '/configuracoes'
+    | '/copywriter'
+    | '/nova-oferta'
+    | '/templates'
+    | '/em-breve/$slug'
+    | '/ofertas/$id'
+    | '/ofertas/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ConfiguracoesRoute: typeof ConfiguracoesRoute
+  CopywriterRoute: typeof CopywriterRoute
+  NovaOfertaRoute: typeof NovaOfertaRoute
+  TemplatesRoute: typeof TemplatesRoute
+  EmBreveSlugRoute: typeof EmBreveSlugRoute
+  OfertasIdRoute: typeof OfertasIdRoute
+  OfertasIndexRoute: typeof OfertasIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +143,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/configuracoes': {
+      id: '/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/configuracoes'
+      preLoaderRoute: typeof ConfiguracoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/copywriter': {
+      id: '/copywriter'
+      path: '/copywriter'
+      fullPath: '/copywriter'
+      preLoaderRoute: typeof CopywriterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/nova-oferta': {
+      id: '/nova-oferta'
+      path: '/nova-oferta'
+      fullPath: '/nova-oferta'
+      preLoaderRoute: typeof NovaOfertaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/templates': {
+      id: '/templates'
+      path: '/templates'
+      fullPath: '/templates'
+      preLoaderRoute: typeof TemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/em-breve/$slug': {
+      id: '/em-breve/$slug'
+      path: '/em-breve/$slug'
+      fullPath: '/em-breve/$slug'
+      preLoaderRoute: typeof EmBreveSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ofertas/': {
+      id: '/ofertas/'
+      path: '/ofertas'
+      fullPath: '/ofertas/'
+      preLoaderRoute: typeof OfertasIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ofertas/$id': {
+      id: '/ofertas/$id'
+      path: '/ofertas/$id'
+      fullPath: '/ofertas/$id'
+      preLoaderRoute: typeof OfertasIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConfiguracoesRoute: ConfiguracoesRoute,
+  CopywriterRoute: CopywriterRoute,
+  NovaOfertaRoute: NovaOfertaRoute,
+  TemplatesRoute: TemplatesRoute,
+  EmBreveSlugRoute: EmBreveSlugRoute,
+  OfertasIdRoute: OfertasIdRoute,
+  OfertasIndexRoute: OfertasIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
