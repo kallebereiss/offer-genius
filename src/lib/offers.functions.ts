@@ -15,7 +15,9 @@ export const generateOffer = createServerFn({ method: "POST" })
     const key = process.env["LOVABLE_API_KEY"];
     if (!key) throw new Error("Configuração de IA ausente.");
 
-    const gateway = createLovableAiGatewayProvider(key);
+    const gateway = createLovableAiGatewayProvider(key, undefined, {
+      structuredOutputs: true,
+    });
 
     const prompt = `Crie uma oferta digital low ticket completa e pronta para vender.
 
