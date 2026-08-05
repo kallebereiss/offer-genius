@@ -3,6 +3,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getErrorMessage } from "@/lib/error-message";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signUp } from "@/lib/auth.functions";
@@ -30,7 +31,7 @@ function CadastroPage() {
       setSuccess(true);
       setTimeout(() => navigate({ to: "/login" }), 2000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Não foi possível criar a conta.");
+      setError(getErrorMessage(err, "Não foi possível criar a conta."));
     } finally {
       setLoading(false);
     }

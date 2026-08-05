@@ -3,6 +3,7 @@ import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-r
 import { useServerFn } from "@tanstack/react-start";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getErrorMessage } from "@/lib/error-message";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signIn } from "@/lib/auth.functions";
@@ -29,7 +30,7 @@ function LoginPage() {
       await router.invalidate();
       await navigate({ to: "/" });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Não foi possível entrar.");
+      setError(getErrorMessage(err, "Não foi possível entrar."));
     } finally {
       setLoading(false);
     }
