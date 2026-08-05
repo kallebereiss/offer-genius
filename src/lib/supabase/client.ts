@@ -1,8 +1,6 @@
 import { createBrowserClient } from "@supabase/ssr";
+import { getSupabaseAnonKey, getSupabaseUrl } from "./config";
 
 export function getSupabaseBrowserClient() {
-  return createBrowserClient(
-    import.meta.env['VITE_SUPABASE_URL'] as string,
-    import.meta.env['VITE_SUPABASE_PUBLISHABLE_KEY'] as string,
-  );
+  return createBrowserClient(getSupabaseUrl(), getSupabaseAnonKey());
 }
