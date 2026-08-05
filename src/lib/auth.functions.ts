@@ -22,8 +22,8 @@ export const signIn = createServerFn({ method: "POST" })
       email: data.email,
       password: data.password,
     });
-    if (error) throw new Error(error.message);
-    return { success: true };
+    if (error) return { success: false as const, error: error.message };
+    return { success: true as const, error: null };
   });
 
 const signUpInput = credentialsInput.extend({
@@ -39,8 +39,8 @@ export const signUp = createServerFn({ method: "POST" })
       password: data.password,
       options: { data: { full_name: data.name } },
     });
-    if (error) throw new Error(error.message);
-    return { success: true };
+    if (error) return { success: false as const, error: error.message };
+    return { success: true as const, error: null };
   });
 
 export const signOut = createServerFn({ method: "POST" }).handler(async () => {

@@ -26,7 +26,8 @@ function LoginPage() {
     setError(null);
     setLoading(true);
     try {
-      await runSignIn({ data: { email, password } });
+      const result = await runSignIn({ data: { email, password } });
+      if (!result.success) throw new Error(result.error);
       await router.invalidate();
       await navigate({ to: "/" });
     } catch (err) {

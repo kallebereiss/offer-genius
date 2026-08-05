@@ -27,7 +27,8 @@ function CadastroPage() {
     setError(null);
     setLoading(true);
     try {
-      await runSignUp({ data: { name, email, password } });
+      const result = await runSignUp({ data: { name, email, password } });
+      if (!result.success) throw new Error(result.error);
       setSuccess(true);
       setTimeout(() => navigate({ to: "/login" }), 2000);
     } catch (err) {
