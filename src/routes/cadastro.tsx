@@ -28,12 +28,10 @@ function CadastroPage() {
     setLoading(true);
     try {
       const result = await runSignUp({ data: { name, email, password } });
-      console.log("signup-result", JSON.stringify(result));
       if (!result.success) throw new Error(result.error ?? "erro");
       setSuccess(true);
       setTimeout(() => navigate({ to: "/login" }), 2000);
     } catch (err) {
-      console.error("signup-error", err);
       setError(getErrorMessage(err, "Não foi possível criar a conta."));
     } finally {
       setLoading(false);

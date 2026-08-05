@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { getSupabaseServerClient } from "./supabase/server";
+import { describeAuthError } from "./auth-error";
 
 export const getUser = createServerFn({ method: "GET" }).handler(async () => {
   const supabase = getSupabaseServerClient();
@@ -22,7 +23,7 @@ export const signIn = createServerFn({ method: "POST" })
       email: data.email,
       password: data.password,
     });
-    if (error) return { success: false as const, error: error.message };
+    if (error) return { success: false as const, error: describeAuthError(error.message, error.status) };
     return { success: true as const, error: null };
   });
 
@@ -39,7 +40,7 @@ export const signUp = createServerFn({ method: "POST" })
       password: data.password,
       options: { data: { full_name: data.name } },
     });
-    if (error) return { success: false as const, error: error.message };
+    if (error) return { success: false as const, error: describeAuthError(error.message, error.status) };
     return { success: true as const, error: null };
   });
 
