@@ -1,6 +1,9 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { Moon, Sun, Sparkles } from "lucide-react";
+import { Moon, Sun, Sparkles, LogOut } from "lucide-react";
+import { useNavigate, useRouter } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { signOut } from "@/lib/auth.functions";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { AppSidebar } from "./AppSidebar";
@@ -15,6 +18,15 @@ type AppShellProps = {
 
 export function AppShell({ title, description, actions, children }: AppShellProps) {
   const { theme, toggle } = useTheme();
+  const navigate = useNavigate();
+  const router = useRouter();
+  const runSignOut = useServerFn(signOut);
+
+  const handleSignOut = async () => {
+    await runSignOut();
+    await router.invalidate();
+    navigate({ to: "/login" });
+  };
 
   return (
     <SidebarProvider>
@@ -41,6 +53,15 @@ export function AppShell({ title, description, actions, children }: AppShellProp
                 className="rounded-full"
               >
                 {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleSignOut}
+                aria-label="Sair"
+                className="rounded-full"
+              >
+                <LogOut className="size-4" />
               </Button>
               <Button asChild size="sm" className="hidden gap-1.5 sm:inline-flex">
                 <Link to="/nova-oferta">

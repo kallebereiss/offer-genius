@@ -17,7 +17,7 @@ import {
 import { updateOffer, useHydrated, useProject } from "@/lib/projects-store";
 import { offerToMarkdown } from "@/lib/export-offer";
 
-export const Route = createFileRoute("/ofertas/$id")({
+export const Route = createFileRoute("/_authenticated/ofertas/$id")({
   head: () => ({
     meta: [
       { title: "Oferta gerada — LowTicket AI" },

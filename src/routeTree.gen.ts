@@ -9,91 +9,119 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
-import { Route as CopywriterRouteImport } from './routes/copywriter'
-import { Route as NovaOfertaRouteImport } from './routes/nova-oferta'
-import { Route as TemplatesRouteImport } from './routes/templates'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as CadastroRouteImport } from './routes/cadastro'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authenticated/configuracoes'
+import { Route as AuthenticatedCopywriterRouteImport } from './routes/_authenticated/copywriter'
+import { Route as AuthenticatedNovaOfertaRouteImport } from './routes/_authenticated/nova-oferta'
+import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
 import { Route as EmBreveSlugRouteImport } from './routes/em-breve.$slug'
-import { Route as OfertasIndexRouteImport } from './routes/ofertas.index'
-import { Route as OfertasIdRouteImport } from './routes/ofertas.$id'
+import { Route as AuthenticatedOfertasIndexRouteImport } from './routes/_authenticated/ofertas.index'
+import { Route as AuthenticatedOfertasIdRouteImport } from './routes/_authenticated/ofertas.$id'
 
-const IndexRoute = IndexRouteImport.update({
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CadastroRoute = CadastroRouteImport.update({
+  id: '/cadastro',
+  path: '/cadastro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const ConfiguracoesRoute = ConfiguracoesRouteImport.update({
-  id: '/configuracoes',
-  path: '/configuracoes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CopywriterRoute = CopywriterRouteImport.update({
+const AuthenticatedConfiguracoesRoute =
+  AuthenticatedConfiguracoesRouteImport.update({
+    id: '/configuracoes',
+    path: '/configuracoes',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedCopywriterRoute = AuthenticatedCopywriterRouteImport.update({
   id: '/copywriter',
   path: '/copywriter',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const NovaOfertaRoute = NovaOfertaRouteImport.update({
+const AuthenticatedNovaOfertaRoute = AuthenticatedNovaOfertaRouteImport.update({
   id: '/nova-oferta',
   path: '/nova-oferta',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
-const TemplatesRoute = TemplatesRouteImport.update({
+const AuthenticatedTemplatesRoute = AuthenticatedTemplatesRouteImport.update({
   id: '/templates',
   path: '/templates',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 const EmBreveSlugRoute = EmBreveSlugRouteImport.update({
   id: '/em-breve/$slug',
   path: '/em-breve/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
-const OfertasIndexRoute = OfertasIndexRouteImport.update({
-  id: '/ofertas/',
-  path: '/ofertas/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const OfertasIdRoute = OfertasIdRouteImport.update({
+const AuthenticatedOfertasIndexRoute =
+  AuthenticatedOfertasIndexRouteImport.update({
+    id: '/ofertas/',
+    path: '/ofertas/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedOfertasIdRoute = AuthenticatedOfertasIdRouteImport.update({
   id: '/ofertas/$id',
   path: '/ofertas/$id',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/configuracoes': typeof ConfiguracoesRoute
-  '/copywriter': typeof CopywriterRoute
-  '/nova-oferta': typeof NovaOfertaRoute
-  '/templates': typeof TemplatesRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/cadastro': typeof CadastroRoute
+  '/login': typeof LoginRoute
+  '/configuracoes': typeof AuthenticatedConfiguracoesRoute
+  '/copywriter': typeof AuthenticatedCopywriterRoute
+  '/nova-oferta': typeof AuthenticatedNovaOfertaRoute
+  '/templates': typeof AuthenticatedTemplatesRoute
   '/em-breve/$slug': typeof EmBreveSlugRoute
-  '/ofertas/$id': typeof OfertasIdRoute
-  '/ofertas/': typeof OfertasIndexRoute
+  '/ofertas/$id': typeof AuthenticatedOfertasIdRoute
+  '/ofertas/': typeof AuthenticatedOfertasIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/configuracoes': typeof ConfiguracoesRoute
-  '/copywriter': typeof CopywriterRoute
-  '/nova-oferta': typeof NovaOfertaRoute
-  '/templates': typeof TemplatesRoute
+  '/cadastro': typeof CadastroRoute
+  '/login': typeof LoginRoute
+  '/configuracoes': typeof AuthenticatedConfiguracoesRoute
+  '/copywriter': typeof AuthenticatedCopywriterRoute
+  '/nova-oferta': typeof AuthenticatedNovaOfertaRoute
+  '/templates': typeof AuthenticatedTemplatesRoute
   '/em-breve/$slug': typeof EmBreveSlugRoute
-  '/ofertas/$id': typeof OfertasIdRoute
-  '/ofertas': typeof OfertasIndexRoute
+  '/': typeof AuthenticatedIndexRoute
+  '/ofertas/$id': typeof AuthenticatedOfertasIdRoute
+  '/ofertas': typeof AuthenticatedOfertasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/configuracoes': typeof ConfiguracoesRoute
-  '/copywriter': typeof CopywriterRoute
-  '/nova-oferta': typeof NovaOfertaRoute
-  '/templates': typeof TemplatesRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/cadastro': typeof CadastroRoute
+  '/login': typeof LoginRoute
+  '/_authenticated/configuracoes': typeof AuthenticatedConfiguracoesRoute
+  '/_authenticated/copywriter': typeof AuthenticatedCopywriterRoute
+  '/_authenticated/nova-oferta': typeof AuthenticatedNovaOfertaRoute
+  '/_authenticated/templates': typeof AuthenticatedTemplatesRoute
   '/em-breve/$slug': typeof EmBreveSlugRoute
-  '/ofertas/$id': typeof OfertasIdRoute
-  '/ofertas/': typeof OfertasIndexRoute
+  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/ofertas/$id': typeof AuthenticatedOfertasIdRoute
+  '/_authenticated/ofertas/': typeof AuthenticatedOfertasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/cadastro'
+    | '/login'
     | '/configuracoes'
     | '/copywriter'
     | '/nova-oferta'
@@ -103,73 +131,95 @@ export interface FileRouteTypes {
     | '/ofertas/'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
+    | '/cadastro'
+    | '/login'
     | '/configuracoes'
     | '/copywriter'
     | '/nova-oferta'
     | '/templates'
     | '/em-breve/$slug'
+    | '/'
     | '/ofertas/$id'
     | '/ofertas'
   id:
     | '__root__'
-    | '/'
-    | '/configuracoes'
-    | '/copywriter'
-    | '/nova-oferta'
-    | '/templates'
+    | '/_authenticated'
+    | '/cadastro'
+    | '/login'
+    | '/_authenticated/configuracoes'
+    | '/_authenticated/copywriter'
+    | '/_authenticated/nova-oferta'
+    | '/_authenticated/templates'
     | '/em-breve/$slug'
-    | '/ofertas/$id'
-    | '/ofertas/'
+    | '/_authenticated/'
+    | '/_authenticated/ofertas/$id'
+    | '/_authenticated/ofertas/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  ConfiguracoesRoute: typeof ConfiguracoesRoute
-  CopywriterRoute: typeof CopywriterRoute
-  NovaOfertaRoute: typeof NovaOfertaRoute
-  TemplatesRoute: typeof TemplatesRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  CadastroRoute: typeof CadastroRoute
+  LoginRoute: typeof LoginRoute
   EmBreveSlugRoute: typeof EmBreveSlugRoute
-  OfertasIdRoute: typeof OfertasIdRoute
-  OfertasIndexRoute: typeof OfertasIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cadastro': {
+      id: '/cadastro'
+      path: '/cadastro'
+      fullPath: '/cadastro'
+      preLoaderRoute: typeof CadastroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/': {
+      id: '/_authenticated/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/configuracoes': {
-      id: '/configuracoes'
+    '/_authenticated/configuracoes': {
+      id: '/_authenticated/configuracoes'
       path: '/configuracoes'
       fullPath: '/configuracoes'
-      preLoaderRoute: typeof ConfiguracoesRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedConfiguracoesRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/copywriter': {
-      id: '/copywriter'
+    '/_authenticated/copywriter': {
+      id: '/_authenticated/copywriter'
       path: '/copywriter'
       fullPath: '/copywriter'
-      preLoaderRoute: typeof CopywriterRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedCopywriterRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/nova-oferta': {
-      id: '/nova-oferta'
+    '/_authenticated/nova-oferta': {
+      id: '/_authenticated/nova-oferta'
       path: '/nova-oferta'
       fullPath: '/nova-oferta'
-      preLoaderRoute: typeof NovaOfertaRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedNovaOfertaRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/templates': {
-      id: '/templates'
+    '/_authenticated/templates': {
+      id: '/_authenticated/templates'
       path: '/templates'
       fullPath: '/templates'
-      preLoaderRoute: typeof TemplatesRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedTemplatesRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
     '/em-breve/$slug': {
       id: '/em-breve/$slug'
@@ -178,33 +228,63 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmBreveSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/ofertas/': {
-      id: '/ofertas/'
+    '/_authenticated/ofertas/': {
+      id: '/_authenticated/ofertas/'
       path: '/ofertas'
       fullPath: '/ofertas/'
-      preLoaderRoute: typeof OfertasIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedOfertasIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
-    '/ofertas/$id': {
-      id: '/ofertas/$id'
+    '/_authenticated/ofertas/$id': {
+      id: '/_authenticated/ofertas/$id'
       path: '/ofertas/$id'
       fullPath: '/ofertas/$id'
-      preLoaderRoute: typeof OfertasIdRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof AuthenticatedOfertasIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
     }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedConfiguracoesRoute: typeof AuthenticatedConfiguracoesRoute
+  AuthenticatedCopywriterRoute: typeof AuthenticatedCopywriterRoute
+  AuthenticatedNovaOfertaRoute: typeof AuthenticatedNovaOfertaRoute
+  AuthenticatedTemplatesRoute: typeof AuthenticatedTemplatesRoute
+  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedOfertasIdRoute: typeof AuthenticatedOfertasIdRoute
+  AuthenticatedOfertasIndexRoute: typeof AuthenticatedOfertasIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedConfiguracoesRoute: AuthenticatedConfiguracoesRoute,
+  AuthenticatedCopywriterRoute: AuthenticatedCopywriterRoute,
+  AuthenticatedNovaOfertaRoute: AuthenticatedNovaOfertaRoute,
+  AuthenticatedTemplatesRoute: AuthenticatedTemplatesRoute,
+  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedOfertasIdRoute: AuthenticatedOfertasIdRoute,
+  AuthenticatedOfertasIndexRoute: AuthenticatedOfertasIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  ConfiguracoesRoute: ConfiguracoesRoute,
-  CopywriterRoute: CopywriterRoute,
-  NovaOfertaRoute: NovaOfertaRoute,
-  TemplatesRoute: TemplatesRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  CadastroRoute: CadastroRoute,
+  LoginRoute: LoginRoute,
   EmBreveSlugRoute: EmBreveSlugRoute,
-  OfertasIdRoute: OfertasIdRoute,
-  OfertasIndexRoute: OfertasIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

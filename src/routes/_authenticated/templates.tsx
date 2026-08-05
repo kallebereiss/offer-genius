@@ -4,7 +4,7 @@ import { AppShell } from "@/components/layout/AppShell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-export const Route = createFileRoute("/templates")({
+export const Route = createFileRoute("/_authenticated/templates")({
   head: () => ({
     meta: [
       { title: "Templates de Oferta — LowTicket AI" },

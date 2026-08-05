@@ -11,7 +11,7 @@ import { generateCopy } from "@/lib/offers.functions";
 import { useProjects } from "@/lib/projects-store";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/copywriter")({
+export const Route = createFileRoute("/_authenticated/copywriter")({
   head: () => ({
     meta: [
       { title: "IA Copywriter — LowTicket AI" },

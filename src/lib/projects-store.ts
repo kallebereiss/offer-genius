@@ -1,26 +1,41 @@
 import { useCallback, useEffect, useState } from "react";
 import type { Brief, GeneratedOffer, OfferProject } from "./offer-schema";
+import {
+  createOfferRow,
+  deleteOfferRow,
+  duplicateOfferRow,
+  listOffers,
+  updateOfferRow,
+  updateProjectRow,
+} from "./offers-db.functions";
 
-const KEY = "lowticket-ai.projects.v1";
+let cache: OfferProject[] = [];
+let cacheLoaded = false;
+let loadPromise: Promise<void> | null = null;
 const listeners = new Set<() => void>();
 
-function read(): OfferProject[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = window.localStorage.getItem(KEY);
-    return raw ? (JSON.parse(raw) as OfferProject[]) : [];
-  } catch {
-    return [];
-  }
-}
-
-function write(projects: OfferProject[]) {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem(KEY, JSON.stringify(projects));
+function notify() {
   listeners.forEach((listener) => listener());
 }
 
-export function createProject(brief: Brief, offer: GeneratedOffer): OfferProject {
+async function ensureLoaded() {
+  if (cacheLoaded) return;
+  if (!loadPromise) {
+    loadPromise = listOffers()
+      .then((projects) => {
+        cache = projects;
+        cacheLoaded = true;
+        notify();
+      })
+      .catch(() => {
+        cacheLoaded = true;
+        notify();
+      });
+  }
+  await loadPromise;
+}
+
+export async function createProject(brief: Brief, offer: GeneratedOffer): Promise<OfferProject> {
   const project: OfferProject = {
     id: crypto.randomUUID(),
     createdAt: new Date().toISOString(),
@@ -29,47 +44,61 @@ export function createProject(brief: Brief, offer: GeneratedOffer): OfferProject
     brief,
     offer,
   };
-  write([project, ...read()]);
+  await createOfferRow({ data: { id: project.id, brief, offer } });
+  cache = [project, ...cache];
+  notify();
   return project;
 }
 
 export function updateProject(id: string, patch: Partial<OfferProject>) {
-  write(read().map((p) => (p.id === id ? { ...p, ...patch } : p)));
+  cache = cache.map((p) => (p.id === id ? { ...p, ...patch } : p));
+  notify();
+  const { favorite, archived } = patch;
+  void updateProjectRow({ data: { id, patch: { favorite, archived } } });
 }
 
 export function updateOffer(id: string, patch: Partial<GeneratedOffer>) {
-  write(read().map((p) => (p.id === id ? { ...p, offer: { ...p.offer, ...patch } } : p)));
+  let merged: GeneratedOffer | undefined;
+  cache = cache.map((p) => {
+    if (p.id !== id) return p;
+    merged = { ...p.offer, ...patch };
+    return { ...p, offer: merged };
+  });
+  notify();
+  if (merged) void updateOfferRow({ data: { id, offer: merged } });
 }
 
 export function deleteProject(id: string) {
-  write(read().filter((p) => p.id !== id));
+  cache = cache.filter((p) => p.id !== id);
+  notify();
+  void deleteOfferRow({ data: { id } });
 }
 
 export function duplicateProject(id: string) {
-  const source = read().find((p) => p.id === id);
+  const source = cache.find((p) => p.id === id);
   if (!source) return;
-  write([
-    {
-      ...source,
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(),
-      offer: { ...source.offer, productName: `${source.offer.productName} (cópia)` },
-    },
-    ...read(),
-  ]);
+  const newId = crypto.randomUUID();
+  const duplicated: OfferProject = {
+    ...source,
+    id: newId,
+    createdAt: new Date().toISOString(),
+    offer: { ...source.offer, productName: `${source.offer.productName} (cópia)` },
+  };
+  cache = [duplicated, ...cache];
+  notify();
+  void duplicateOfferRow({ data: { sourceId: id, newId } });
 }
 
 export function useProjects() {
-  const [projects, setProjects] = useState<OfferProject[]>([]);
+  const [projects, setProjects] = useState<OfferProject[]>(cache);
 
   useEffect(() => {
-    const sync = () => setProjects(read());
+    const sync = () => setProjects(cache);
     sync();
     listeners.add(sync);
-    window.addEventListener("storage", sync);
+    void ensureLoaded();
     return () => {
       listeners.delete(sync);
-      window.removeEventListener("storage", sync);
     };
   }, []);
 
@@ -82,8 +111,21 @@ export function useProject(id: string) {
 }
 
 export function useHydrated() {
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => setHydrated(true), []);
+  const [hydrated, setHydrated] = useState(cacheLoaded);
+
+  useEffect(() => {
+    if (cacheLoaded) {
+      setHydrated(true);
+      return;
+    }
+    const sync = () => setHydrated(cacheLoaded);
+    listeners.add(sync);
+    void ensureLoaded();
+    return () => {
+      listeners.delete(sync);
+    };
+  }, []);
+
   return hydrated;
 }
 

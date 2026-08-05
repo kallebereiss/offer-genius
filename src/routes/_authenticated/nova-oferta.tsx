@@ -14,7 +14,7 @@ import { FORMATOS, NICHOS, OBJETIVOS, type Brief } from "@/lib/offer-schema";
 import { generateOffer } from "@/lib/offers.functions";
 import { createProject } from "@/lib/projects-store";
 
-export const Route = createFileRoute("/nova-oferta")({
+export const Route = createFileRoute("/_authenticated/nova-oferta")({
   head: () => ({
     meta: [
       { title: "Nova Oferta com IA — LowTicket AI" },
@@ -127,7 +127,7 @@ function NovaOfertaPage() {
     setLoading(true);
     try {
       const offer = await runGenerate({ data: brief });
-      const project = createProject(brief, offer);
+      const project = await createProject(brief, offer);
       toast.success("Oferta gerada com sucesso!");
       navigate({ to: "/ofertas/$id", params: { id: project.id } });
     } catch (error) {

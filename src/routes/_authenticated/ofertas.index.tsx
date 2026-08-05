@@ -14,7 +14,7 @@ import {
 } from "@/lib/projects-store";
 import { cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/ofertas/")({
+export const Route = createFileRoute("/_authenticated/ofertas/")({
   head: () => ({
     meta: [
       { title: "Minhas Ofertas — LowTicket AI" },
