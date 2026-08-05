@@ -32,6 +32,7 @@ function CadastroPage() {
       setSuccess(true);
       setTimeout(() => navigate({ to: "/login" }), 2000);
     } catch (err) {
+      console.error("signup-error", err);
       setError(getErrorMessage(err, "Não foi possível criar a conta."));
     } finally {
       setLoading(false);
