@@ -11,7 +11,11 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { FORMATOS, NICHOS, OBJETIVOS, type Brief } from "@/lib/offer-schema";
-import { generateOffer } from "@/lib/offers.functions";
+import {
+  generateOfferAssets,
+  generateOfferCore,
+  generateOfferResearch,
+} from "@/lib/offers.functions";
 import { createProject } from "@/lib/projects-store";
 
 export const Route = createFileRoute("/_authenticated/nova-oferta")({
