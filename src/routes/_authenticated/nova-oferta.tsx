@@ -115,7 +115,9 @@ const EMPTY: Brief = {
 
 function NovaOfertaPage() {
   const navigate = useNavigate();
-  const runGenerate = useServerFn(generateOffer);
+  const runCore = useServerFn(generateOfferCore);
+  const runAssets = useServerFn(generateOfferAssets);
+  const runResearch = useServerFn(generateOfferResearch);
   const [step, setStep] = useState(0);
   const [brief, setBrief] = useState<Brief>(EMPTY);
   const [loading, setLoading] = useState(false);
