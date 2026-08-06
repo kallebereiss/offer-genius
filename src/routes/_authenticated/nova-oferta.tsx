@@ -132,7 +132,12 @@ function NovaOfertaPage() {
   const handleGenerate = async () => {
     setLoading(true);
     try {
-      const offer = await runGenerate({ data: brief });
+      const [core, assets, research] = await Promise.all([
+        runCore({ data: brief }),
+        runAssets({ data: brief }),
+        runResearch({ data: brief }),
+      ]);
+      const offer = { ...core, ...assets, ...research };
       const project = await createProject(brief, offer);
       toast.success("Oferta gerada com sucesso!");
       navigate({ to: "/ofertas/$id", params: { id: project.id } });
