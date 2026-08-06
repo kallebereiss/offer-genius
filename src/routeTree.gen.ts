@@ -11,13 +11,17 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as CadastroRouteImport } from './routes/cadastro'
+import { Route as EsqueciSenhaRouteImport } from './routes/esqueci-senha'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as PrivacidadeRouteImport } from './routes/privacidade'
+import { Route as RedefinirSenhaRouteImport } from './routes/redefinir-senha'
+import { Route as TermosRouteImport } from './routes/termos'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
+import { Route as AuthenticatedBibliotecaRouteImport } from './routes/_authenticated/biblioteca'
 import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authenticated/configuracoes'
 import { Route as AuthenticatedCopywriterRouteImport } from './routes/_authenticated/copywriter'
 import { Route as AuthenticatedNovaOfertaRouteImport } from './routes/_authenticated/nova-oferta'
 import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
-import { Route as EmBreveSlugRouteImport } from './routes/em-breve.$slug'
 import { Route as AuthenticatedOfertasIndexRouteImport } from './routes/_authenticated/ofertas.index'
 import { Route as AuthenticatedOfertasIdRouteImport } from './routes/_authenticated/ofertas.$id'
 
@@ -30,14 +34,39 @@ const CadastroRoute = CadastroRouteImport.update({
   path: '/cadastro',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EsqueciSenhaRoute = EsqueciSenhaRouteImport.update({
+  id: '/esqueci-senha',
+  path: '/esqueci-senha',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacidadeRoute = PrivacidadeRouteImport.update({
+  id: '/privacidade',
+  path: '/privacidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RedefinirSenhaRoute = RedefinirSenhaRouteImport.update({
+  id: '/redefinir-senha',
+  path: '/redefinir-senha',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermosRoute = TermosRouteImport.update({
+  id: '/termos',
+  path: '/termos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedBibliotecaRoute = AuthenticatedBibliotecaRouteImport.update({
+  id: '/biblioteca',
+  path: '/biblioteca',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedConfiguracoesRoute =
@@ -61,11 +90,6 @@ const AuthenticatedTemplatesRoute = AuthenticatedTemplatesRouteImport.update({
   path: '/templates',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const EmBreveSlugRoute = EmBreveSlugRouteImport.update({
-  id: '/em-breve/$slug',
-  path: '/em-breve/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthenticatedOfertasIndexRoute =
   AuthenticatedOfertasIndexRouteImport.update({
     id: '/ofertas/',
@@ -81,23 +105,31 @@ const AuthenticatedOfertasIdRoute = AuthenticatedOfertasIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
   '/cadastro': typeof CadastroRoute
+  '/esqueci-senha': typeof EsqueciSenhaRoute
   '/login': typeof LoginRoute
+  '/privacidade': typeof PrivacidadeRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
+  '/termos': typeof TermosRoute
+  '/biblioteca': typeof AuthenticatedBibliotecaRoute
   '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/copywriter': typeof AuthenticatedCopywriterRoute
   '/nova-oferta': typeof AuthenticatedNovaOfertaRoute
   '/templates': typeof AuthenticatedTemplatesRoute
-  '/em-breve/$slug': typeof EmBreveSlugRoute
   '/ofertas/$id': typeof AuthenticatedOfertasIdRoute
   '/ofertas/': typeof AuthenticatedOfertasIndexRoute
 }
 export interface FileRoutesByTo {
   '/cadastro': typeof CadastroRoute
+  '/esqueci-senha': typeof EsqueciSenhaRoute
   '/login': typeof LoginRoute
+  '/privacidade': typeof PrivacidadeRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
+  '/termos': typeof TermosRoute
+  '/biblioteca': typeof AuthenticatedBibliotecaRoute
   '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/copywriter': typeof AuthenticatedCopywriterRoute
   '/nova-oferta': typeof AuthenticatedNovaOfertaRoute
   '/templates': typeof AuthenticatedTemplatesRoute
-  '/em-breve/$slug': typeof EmBreveSlugRoute
   '/': typeof AuthenticatedIndexRoute
   '/ofertas/$id': typeof AuthenticatedOfertasIdRoute
   '/ofertas': typeof AuthenticatedOfertasIndexRoute
@@ -106,12 +138,16 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/cadastro': typeof CadastroRoute
+  '/esqueci-senha': typeof EsqueciSenhaRoute
   '/login': typeof LoginRoute
+  '/privacidade': typeof PrivacidadeRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
+  '/termos': typeof TermosRoute
+  '/_authenticated/biblioteca': typeof AuthenticatedBibliotecaRoute
   '/_authenticated/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/_authenticated/copywriter': typeof AuthenticatedCopywriterRoute
   '/_authenticated/nova-oferta': typeof AuthenticatedNovaOfertaRoute
   '/_authenticated/templates': typeof AuthenticatedTemplatesRoute
-  '/em-breve/$slug': typeof EmBreveSlugRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/ofertas/$id': typeof AuthenticatedOfertasIdRoute
   '/_authenticated/ofertas/': typeof AuthenticatedOfertasIndexRoute
@@ -121,23 +157,31 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/cadastro'
+    | '/esqueci-senha'
     | '/login'
+    | '/privacidade'
+    | '/redefinir-senha'
+    | '/termos'
+    | '/biblioteca'
     | '/configuracoes'
     | '/copywriter'
     | '/nova-oferta'
     | '/templates'
-    | '/em-breve/$slug'
     | '/ofertas/$id'
     | '/ofertas/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/cadastro'
+    | '/esqueci-senha'
     | '/login'
+    | '/privacidade'
+    | '/redefinir-senha'
+    | '/termos'
+    | '/biblioteca'
     | '/configuracoes'
     | '/copywriter'
     | '/nova-oferta'
     | '/templates'
-    | '/em-breve/$slug'
     | '/'
     | '/ofertas/$id'
     | '/ofertas'
@@ -145,12 +189,16 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_authenticated'
     | '/cadastro'
+    | '/esqueci-senha'
     | '/login'
+    | '/privacidade'
+    | '/redefinir-senha'
+    | '/termos'
+    | '/_authenticated/biblioteca'
     | '/_authenticated/configuracoes'
     | '/_authenticated/copywriter'
     | '/_authenticated/nova-oferta'
     | '/_authenticated/templates'
-    | '/em-breve/$slug'
     | '/_authenticated/'
     | '/_authenticated/ofertas/$id'
     | '/_authenticated/ofertas/'
@@ -159,8 +207,11 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   CadastroRoute: typeof CadastroRoute
+  EsqueciSenhaRoute: typeof EsqueciSenhaRoute
   LoginRoute: typeof LoginRoute
-  EmBreveSlugRoute: typeof EmBreveSlugRoute
+  PrivacidadeRoute: typeof PrivacidadeRoute
+  RedefinirSenhaRoute: typeof RedefinirSenhaRoute
+  TermosRoute: typeof TermosRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -179,6 +230,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CadastroRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/esqueci-senha': {
+      id: '/esqueci-senha'
+      path: '/esqueci-senha'
+      fullPath: '/esqueci-senha'
+      preLoaderRoute: typeof EsqueciSenhaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -186,11 +244,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacidade': {
+      id: '/privacidade'
+      path: '/privacidade'
+      fullPath: '/privacidade'
+      preLoaderRoute: typeof PrivacidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/redefinir-senha': {
+      id: '/redefinir-senha'
+      path: '/redefinir-senha'
+      fullPath: '/redefinir-senha'
+      preLoaderRoute: typeof RedefinirSenhaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/termos': {
+      id: '/termos'
+      path: '/termos'
+      fullPath: '/termos'
+      preLoaderRoute: typeof TermosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/': {
       id: '/_authenticated/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/biblioteca': {
+      id: '/_authenticated/biblioteca'
+      path: '/biblioteca'
+      fullPath: '/biblioteca'
+      preLoaderRoute: typeof AuthenticatedBibliotecaRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/configuracoes': {
@@ -221,13 +307,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTemplatesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/em-breve/$slug': {
-      id: '/em-breve/$slug'
-      path: '/em-breve/$slug'
-      fullPath: '/em-breve/$slug'
-      preLoaderRoute: typeof EmBreveSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authenticated/ofertas/': {
       id: '/_authenticated/ofertas/'
       path: '/ofertas'
@@ -246,6 +325,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedBibliotecaRoute: typeof AuthenticatedBibliotecaRoute
   AuthenticatedConfiguracoesRoute: typeof AuthenticatedConfiguracoesRoute
   AuthenticatedCopywriterRoute: typeof AuthenticatedCopywriterRoute
   AuthenticatedNovaOfertaRoute: typeof AuthenticatedNovaOfertaRoute
@@ -256,6 +336,7 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedBibliotecaRoute: AuthenticatedBibliotecaRoute,
   AuthenticatedConfiguracoesRoute: AuthenticatedConfiguracoesRoute,
   AuthenticatedCopywriterRoute: AuthenticatedCopywriterRoute,
   AuthenticatedNovaOfertaRoute: AuthenticatedNovaOfertaRoute,
@@ -272,8 +353,11 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   CadastroRoute: CadastroRoute,
+  EsqueciSenhaRoute: EsqueciSenhaRoute,
   LoginRoute: LoginRoute,
-  EmBreveSlugRoute: EmBreveSlugRoute,
+  PrivacidadeRoute: PrivacidadeRoute,
+  RedefinirSenhaRoute: RedefinirSenhaRoute,
+  TermosRoute: TermosRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
