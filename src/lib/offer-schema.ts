@@ -60,7 +60,7 @@ export const briefSchema = z.object({
 
 export type Brief = z.infer<typeof briefSchema>;
 
-export const offerSchema = z.object({
+export const offerCoreSchema = z.object({
   productName: z.string(),
   slogan: z.string(),
   positioning: z.string(),
@@ -82,6 +82,9 @@ export const offerSchema = z.object({
   faq: z.array(z.object({ question: z.string(), answer: z.string() })),
   ctas: z.array(z.string()),
   nameIdeas: z.array(z.string()),
+});
+
+export const offerAssetsSchema = z.object({
   landing: z.object({
     heroHeadline: z.string(),
     heroSubheadline: z.string(),
@@ -96,6 +99,9 @@ export const offerSchema = z.object({
     z.object({ format: z.string(), hook: z.string(), script: z.string() }),
   ),
   emails: z.array(z.object({ subject: z.string(), body: z.string() })),
+});
+
+export const offerResearchSchema = z.object({
   marketResearch: z.object({
     trends: z.array(z.string()),
     pains: z.array(z.string()),
@@ -118,7 +124,12 @@ export const offerSchema = z.object({
   }),
 });
 
+export const offerSchema = offerCoreSchema
+  .extend(offerAssetsSchema.shape)
+  .extend(offerResearchSchema.shape);
+
 export type GeneratedOffer = z.infer<typeof offerSchema>;
+
 
 export type OfferProject = {
   id: string;

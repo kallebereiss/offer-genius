@@ -11,7 +11,11 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { FORMATOS, NICHOS, OBJETIVOS, type Brief } from "@/lib/offer-schema";
-import { generateOffer } from "@/lib/offers.functions";
+import {
+  generateOfferAssets,
+  generateOfferCore,
+  generateOfferResearch,
+} from "@/lib/offers.functions";
 import { createProject } from "@/lib/projects-store";
 
 export const Route = createFileRoute("/_authenticated/nova-oferta")({
@@ -111,7 +115,9 @@ const EMPTY: Brief = {
 
 function NovaOfertaPage() {
   const navigate = useNavigate();
-  const runGenerate = useServerFn(generateOffer);
+  const runCore = useServerFn(generateOfferCore);
+  const runAssets = useServerFn(generateOfferAssets);
+  const runResearch = useServerFn(generateOfferResearch);
   const [step, setStep] = useState(0);
   const [brief, setBrief] = useState<Brief>(EMPTY);
   const [loading, setLoading] = useState(false);
@@ -126,7 +132,12 @@ function NovaOfertaPage() {
   const handleGenerate = async () => {
     setLoading(true);
     try {
-      const offer = await runGenerate({ data: brief });
+      const [core, assets, research] = await Promise.all([
+        runCore({ data: brief }),
+        runAssets({ data: brief }),
+        runResearch({ data: brief }),
+      ]);
+      const offer = { ...core, ...assets, ...research };
       const project = await createProject(brief, offer);
       toast.success("Oferta gerada com sucesso!");
       navigate({ to: "/ofertas/$id", params: { id: project.id } });

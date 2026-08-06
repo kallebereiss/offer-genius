@@ -6,52 +6,82 @@ import {
   AI_MODEL,
   OFFER_SYSTEM_PROMPT,
   briefSchema,
-  offerSchema,
+  offerAssetsSchema,
+  offerCoreSchema,
+  offerResearchSchema,
+  type Brief,
 } from "./offer-schema";
 
-export const generateOffer = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) => briefSchema.parse(input))
-  .handler(async ({ data }) => {
-    const key = process.env["LOVABLE_API_KEY"];
-    if (!key) throw new Error("Configuração de IA ausente.");
-
-    const gateway = createLovableAiGatewayProvider(key, undefined, {
-      structuredOutputs: true,
-    });
-
-    const prompt = `Crie uma oferta digital low ticket completa e pronta para vender.
-
-Nicho: ${data.nicho}
+function briefBlock(data: Brief) {
+  return `Nicho: ${data.nicho}
 Subnicho: ${data.subnicho}
 Público: ${data.publico}
 Principal problema: ${data.problema}
 Principal desejo: ${data.desejo}
 Formato do produto: ${data.formato}
 Preço desejado: ${data.preco}
-Objetivo da oferta: ${data.objetivo}
+Objetivo da oferta: ${data.objetivo}`;
+}
 
-Entregue produto, nome, posicionamento, promessa, copy completa, página de vendas, bônus, garantia, funil, criativos, e-mails, pesquisa de mercado e um score honesto de 0 a 100 com sugestões de melhoria.`;
+async function generatePart<T>(schema: z.ZodType<T>, instruction: string, data: Brief) {
+  const key = process.env["LOVABLE_API_KEY"];
+  if (!key) throw new Error("Configuração de IA ausente.");
 
-    try {
-      const result = streamText({
-        model: gateway(AI_MODEL),
-        system: OFFER_SYSTEM_PROMPT,
-        prompt,
-        output: Output.object({ schema: offerSchema }),
-      });
-      return await result.output;
-    } catch (error) {
-      if (NoObjectGeneratedError.isInstance(error)) {
-        try {
-          const raw = (error.text ?? "").replace(/^```json|```$/g, "").trim();
-          return offerSchema.parse(JSON.parse(raw));
-        } catch {
-          throw new Error("A IA não conseguiu gerar a oferta. Tente novamente.");
-        }
-      }
-      throw error;
-    }
+  const gateway = createLovableAiGatewayProvider(key, undefined, {
+    structuredOutputs: true,
   });
+
+  try {
+    const result = streamText({
+      model: gateway(AI_MODEL),
+      system: OFFER_SYSTEM_PROMPT,
+      prompt: `${instruction}\n\n${briefBlock(data)}`,
+      output: Output.object({ schema }),
+    });
+    return await result.output;
+  } catch (error) {
+    if (NoObjectGeneratedError.isInstance(error)) {
+      try {
+        const raw = (error.text ?? "").replace(/^```json|```$/g, "").trim();
+        return schema.parse(JSON.parse(raw));
+      } catch {
+        throw new Error("A IA não conseguiu gerar essa parte da oferta. Tente novamente.");
+      }
+    }
+    throw error;
+  }
+}
+
+export const generateOfferCore = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => briefSchema.parse(input))
+  .handler(({ data }) =>
+    generatePart(
+      offerCoreSchema,
+      "Crie o núcleo de uma oferta digital low ticket pronta para vender: produto, nome, posicionamento, avatar, promessa, headline, bullets, módulos, bônus, garantia, objeções, FAQ, CTAs e ideias de nome.",
+      data,
+    ),
+  );
+
+export const generateOfferAssets = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => briefSchema.parse(input))
+  .handler(({ data }) =>
+    generatePart(
+      offerAssetsSchema,
+      "Crie os ativos de venda de uma oferta digital low ticket: página de vendas completa (landing), funil, criativos de anúncio e sequência de e-mails.",
+      data,
+    ),
+  );
+
+export const generateOfferResearch = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => briefSchema.parse(input))
+  .handler(({ data }) =>
+    generatePart(
+      offerResearchSchema,
+      "Faça a pesquisa de mercado dessa oferta digital low ticket (tendências, dores, desejos, palavras-chave, concorrentes, oportunidades, preço médio), o plano de lançamento e um score honesto de 0 a 100 com sugestões de melhoria.",
+      data,
+    ),
+  );
+
 
 const textInput = z.object({
   task: z.string(),

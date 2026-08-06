@@ -59,7 +59,7 @@ function List({ items }: { items: string[] }) {
 }
 
 function OfertaDetalhe() {
-  const { id } = useParams({ from: "/ofertas/$id" });
+  const { id } = useParams({ from: "/_authenticated/ofertas/$id" });
   const project = useProject(id);
   const hydrated = useHydrated();
 
