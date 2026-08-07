@@ -19,10 +19,10 @@ import {
 import { createProject } from "@/lib/projects-store";
 
 type NovaOfertaSearch = {
-  nicho?: string;
-  formato?: string;
-  preco?: string;
-  desejo?: string;
+  nicho: string | undefined;
+  formato: string | undefined;
+  preco: string | undefined;
+  desejo: string | undefined;
 };
 
 export const Route = createFileRoute("/_authenticated/nova-oferta")({
