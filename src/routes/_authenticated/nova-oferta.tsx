@@ -18,7 +18,20 @@ import {
 } from "@/lib/offers.functions";
 import { createProject } from "@/lib/projects-store";
 
+type NovaOfertaSearch = {
+  nicho: string | undefined;
+  formato: string | undefined;
+  preco: string | undefined;
+  desejo: string | undefined;
+};
+
 export const Route = createFileRoute("/_authenticated/nova-oferta")({
+  validateSearch: (search: Record<string, unknown>): NovaOfertaSearch => ({
+    nicho: typeof search["nicho"] === "string" ? search["nicho"] : undefined,
+    formato: typeof search["formato"] === "string" ? search["formato"] : undefined,
+    preco: typeof search["preco"] === "string" ? search["preco"] : undefined,
+    desejo: typeof search["desejo"] === "string" ? search["desejo"] : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Nova Oferta com IA — LowTicket AI" },
@@ -115,11 +128,18 @@ const EMPTY: Brief = {
 
 function NovaOfertaPage() {
   const navigate = useNavigate();
+  const search = Route.useSearch();
   const runCore = useServerFn(generateOfferCore);
   const runAssets = useServerFn(generateOfferAssets);
   const runResearch = useServerFn(generateOfferResearch);
   const [step, setStep] = useState(0);
-  const [brief, setBrief] = useState<Brief>(EMPTY);
+  const [brief, setBrief] = useState<Brief>(() => ({
+    ...EMPTY,
+    nicho: search.nicho ?? "",
+    formato: search.formato ?? "",
+    preco: search.preco ?? "",
+    desejo: search.desejo ?? "",
+  }));
   const [loading, setLoading] = useState(false);
 
   const current = STEPS[step]!;
