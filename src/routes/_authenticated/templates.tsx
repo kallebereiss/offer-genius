@@ -24,15 +24,69 @@ export const Route = createFileRoute("/_authenticated/templates")({
 });
 
 const TEMPLATES = [
-  { nicho: "Fitness", nome: "Desafio 21 Dias", formato: "Desafio", preco: "R$ 27", promessa: "Criar consistência de treino em 21 dias sem academia." },
-  { nicho: "Finanças", nome: "Planilha Sai do Vermelho", formato: "Planilha", preco: "R$ 19", promessa: "Organizar as contas e sobrar dinheiro no fim do mês." },
-  { nicho: "Marketing", nome: "Pack 300 Prompts", formato: "Pack de Prompts", preco: "R$ 37", promessa: "Produzir 30 dias de conteúdo em uma tarde." },
-  { nicho: "Idiomas", nome: "Inglês em 15 Minutos", formato: "Mini Curso", preco: "R$ 47", promessa: "Falar frases úteis já na primeira semana." },
-  { nicho: "Pets", nome: "Guia do Filhote", formato: "Ebook", preco: "R$ 19", promessa: "Educar o filhote sem estresse nos primeiros 60 dias." },
-  { nicho: "Estética", nome: "Skincare Essencial", formato: "Checklist", preco: "R$ 17", promessa: "Rotina de pele em 5 passos com produtos de farmácia." },
-  { nicho: "Maternidade", nome: "Sono do Bebê", formato: "Kit", preco: "R$ 47", promessa: "Noites completas de sono em até 3 semanas." },
-  { nicho: "Programação", nome: "Portfólio em 7 Dias", formato: "Workshop", preco: "R$ 67", promessa: "Publicar 3 projetos reais e aplicar para vagas." },
-  { nicho: "Culinária", nome: "Marmitas Fit", formato: "Pacote", preco: "R$ 27", promessa: "Semana inteira de refeições em 2 horas de preparo." },
+  {
+    nicho: "Fitness",
+    nome: "Desafio 21 Dias",
+    formato: "Desafio",
+    preco: "R$ 27",
+    promessa: "Criar consistência de treino em 21 dias sem academia.",
+  },
+  {
+    nicho: "Finanças",
+    nome: "Planilha Sai do Vermelho",
+    formato: "Planilha",
+    preco: "R$ 19",
+    promessa: "Organizar as contas e sobrar dinheiro no fim do mês.",
+  },
+  {
+    nicho: "Marketing",
+    nome: "Pack 300 Prompts",
+    formato: "Pack de Prompts",
+    preco: "R$ 37",
+    promessa: "Produzir 30 dias de conteúdo em uma tarde.",
+  },
+  {
+    nicho: "Idiomas",
+    nome: "Inglês em 15 Minutos",
+    formato: "Mini Curso",
+    preco: "R$ 47",
+    promessa: "Falar frases úteis já na primeira semana.",
+  },
+  {
+    nicho: "Pets",
+    nome: "Guia do Filhote",
+    formato: "Ebook",
+    preco: "R$ 19",
+    promessa: "Educar o filhote sem estresse nos primeiros 60 dias.",
+  },
+  {
+    nicho: "Estética",
+    nome: "Skincare Essencial",
+    formato: "Checklist",
+    preco: "R$ 17",
+    promessa: "Rotina de pele em 5 passos com produtos de farmácia.",
+  },
+  {
+    nicho: "Maternidade",
+    nome: "Sono do Bebê",
+    formato: "Kit",
+    preco: "R$ 47",
+    promessa: "Noites completas de sono em até 3 semanas.",
+  },
+  {
+    nicho: "Programação",
+    nome: "Portfólio em 7 Dias",
+    formato: "Workshop",
+    preco: "R$ 67",
+    promessa: "Publicar 3 projetos reais e aplicar para vagas.",
+  },
+  {
+    nicho: "Culinária",
+    nome: "Marmitas Fit",
+    formato: "Pacote",
+    preco: "R$ 27",
+    promessa: "Semana inteira de refeições em 2 horas de preparo.",
+  },
 ];
 
 function TemplatesPage() {
