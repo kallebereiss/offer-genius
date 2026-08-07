@@ -53,7 +53,15 @@ function TemplatesPage() {
               {template.formato} · {template.preco}
             </p>
             <Button asChild variant="secondary" size="sm" className="mt-4 gap-1.5">
-              <Link to="/nova-oferta">
+              <Link
+                to="/nova-oferta"
+                search={{
+                  nicho: template.nicho,
+                  formato: template.formato,
+                  preco: template.preco,
+                  desejo: template.promessa,
+                }}
+              >
                 Usar este modelo <ArrowRight className="size-4" />
               </Link>
             </Button>
