@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
-import { Download, Sparkles } from "lucide-react";
+import { Download, ExternalLink, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/layout/AppShell";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/accordion";
 import { updateOffer, useHydrated, useProject } from "@/lib/projects-store";
 import { offerToMarkdown } from "@/lib/export-offer";
+import { offerToLandingHtml } from "@/lib/export-landing";
 
 export const Route = createFileRoute("/_authenticated/ofertas/$id")({
   head: () => ({
@@ -80,16 +81,38 @@ function OfertaDetalhe() {
 
   const { offer, brief } = project;
 
-  const handleExport = () => {
-    const blob = new Blob([offerToMarkdown(project)], { type: "text/markdown" });
+  const slug = offer.productName.toLowerCase().replace(/\s+/g, "-");
+
+  const download = (content: string, type: string, filename: string) => {
+    const blob = new Blob([content], { type });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${offer.productName.toLowerCase().replace(/\s+/g, "-")}.md`;
+    link.download = filename;
     link.click();
     URL.revokeObjectURL(url);
+  };
+
+  const handleExport = () => {
+    download(offerToMarkdown(project), "text/markdown", `${slug}.md`);
     toast.success("Materiais exportados");
   };
+
+  const handleDownloadLanding = () => {
+    download(offerToLandingHtml(project), "text/html", `${slug}-pagina-de-vendas.html`);
+    toast.success("Página de vendas baixada");
+  };
+
+  const handlePreviewLanding = () => {
+    const win = window.open("", "_blank");
+    if (!win) {
+      toast.error("Permita pop-ups para visualizar a página.");
+      return;
+    }
+    win.document.write(offerToLandingHtml(project));
+    win.document.close();
+  };
+
 
   return (
     <AppShell
@@ -127,7 +150,7 @@ function OfertaDetalhe() {
           className="mt-4 resize-none bg-muted/40"
         />
         <p className="mt-2 text-xs text-muted-foreground">
-          Edições são salvas automaticamente neste navegador.
+          Edições são salvas automaticamente na sua conta.
         </p>
       </div>
 
@@ -262,7 +285,15 @@ function OfertaDetalhe() {
           </Section>
         </TabsContent>
 
-        <TabsContent value="landing" className="mt-4">
+        <TabsContent value="landing" className="mt-4 space-y-4">
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" onClick={handlePreviewLanding} className="gap-1.5">
+              <ExternalLink className="size-4" /> Visualizar página completa
+            </Button>
+            <Button size="sm" variant="outline" onClick={handleDownloadLanding} className="gap-1.5">
+              <Download className="size-4" /> Baixar HTML
+            </Button>
+          </div>
           <div className="surface-card overflow-hidden">
             <div
               className="border-b px-6 py-12 text-center"
