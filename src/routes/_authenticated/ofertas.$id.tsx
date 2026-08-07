@@ -285,7 +285,15 @@ function OfertaDetalhe() {
           </Section>
         </TabsContent>
 
-        <TabsContent value="landing" className="mt-4">
+        <TabsContent value="landing" className="mt-4 space-y-4">
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" onClick={handlePreviewLanding} className="gap-1.5">
+              <ExternalLink className="size-4" /> Visualizar página completa
+            </Button>
+            <Button size="sm" variant="outline" onClick={handleDownloadLanding} className="gap-1.5">
+              <Download className="size-4" /> Baixar HTML
+            </Button>
+          </div>
           <div className="surface-card overflow-hidden">
             <div
               className="border-b px-6 py-12 text-center"
