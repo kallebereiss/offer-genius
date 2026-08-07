@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/accordion";
 import { updateOffer, useHydrated, useProject } from "@/lib/projects-store";
 import { offerToMarkdown } from "@/lib/export-offer";
+import { offerToLandingHtml } from "@/lib/export-landing";
 
 export const Route = createFileRoute("/_authenticated/ofertas/$id")({
   head: () => ({
