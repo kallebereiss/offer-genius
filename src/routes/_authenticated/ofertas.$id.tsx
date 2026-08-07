@@ -150,7 +150,7 @@ function OfertaDetalhe() {
           className="mt-4 resize-none bg-muted/40"
         />
         <p className="mt-2 text-xs text-muted-foreground">
-          Edições são salvas automaticamente neste navegador.
+          Edições são salvas automaticamente na sua conta.
         </p>
       </div>
 
