@@ -128,11 +128,18 @@ const EMPTY: Brief = {
 
 function NovaOfertaPage() {
   const navigate = useNavigate();
+  const search = Route.useSearch();
   const runCore = useServerFn(generateOfferCore);
   const runAssets = useServerFn(generateOfferAssets);
   const runResearch = useServerFn(generateOfferResearch);
   const [step, setStep] = useState(0);
-  const [brief, setBrief] = useState<Brief>(EMPTY);
+  const [brief, setBrief] = useState<Brief>(() => ({
+    ...EMPTY,
+    nicho: search.nicho ?? "",
+    formato: search.formato ?? "",
+    preco: search.preco ?? "",
+    desejo: search.desejo ?? "",
+  }));
   const [loading, setLoading] = useState(false);
 
   const current = STEPS[step]!;
