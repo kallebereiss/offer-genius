@@ -18,7 +18,20 @@ import {
 } from "@/lib/offers.functions";
 import { createProject } from "@/lib/projects-store";
 
+type NovaOfertaSearch = {
+  nicho?: string;
+  formato?: string;
+  preco?: string;
+  desejo?: string;
+};
+
 export const Route = createFileRoute("/_authenticated/nova-oferta")({
+  validateSearch: (search: Record<string, unknown>): NovaOfertaSearch => ({
+    nicho: typeof search["nicho"] === "string" ? search["nicho"] : undefined,
+    formato: typeof search["formato"] === "string" ? search["formato"] : undefined,
+    preco: typeof search["preco"] === "string" ? search["preco"] : undefined,
+    desejo: typeof search["desejo"] === "string" ? search["desejo"] : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Nova Oferta com IA — LowTicket AI" },
