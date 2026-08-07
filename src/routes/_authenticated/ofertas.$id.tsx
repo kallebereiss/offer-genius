@@ -81,16 +81,38 @@ function OfertaDetalhe() {
 
   const { offer, brief } = project;
 
-  const handleExport = () => {
-    const blob = new Blob([offerToMarkdown(project)], { type: "text/markdown" });
+  const slug = offer.productName.toLowerCase().replace(/\s+/g, "-");
+
+  const download = (content: string, type: string, filename: string) => {
+    const blob = new Blob([content], { type });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${offer.productName.toLowerCase().replace(/\s+/g, "-")}.md`;
+    link.download = filename;
     link.click();
     URL.revokeObjectURL(url);
+  };
+
+  const handleExport = () => {
+    download(offerToMarkdown(project), "text/markdown", `${slug}.md`);
     toast.success("Materiais exportados");
   };
+
+  const handleDownloadLanding = () => {
+    download(offerToLandingHtml(project), "text/html", `${slug}-pagina-de-vendas.html`);
+    toast.success("Página de vendas baixada");
+  };
+
+  const handlePreviewLanding = () => {
+    const win = window.open("", "_blank");
+    if (!win) {
+      toast.error("Permita pop-ups para visualizar a página.");
+      return;
+    }
+    win.document.write(offerToLandingHtml(project));
+    win.document.close();
+  };
+
 
   return (
     <AppShell
