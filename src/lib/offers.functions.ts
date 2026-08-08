@@ -83,7 +83,6 @@ export const generateOfferResearch = createServerFn({ method: "POST" })
     ),
   );
 
-
 const editLandingInput = z.object({
   landing: landingSchema,
   request: z.string(),
@@ -131,7 +130,6 @@ const textInput = z.object({
   task: z.string(),
   context: z.string(),
 });
-
 
 export const generateCopy = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => textInput.parse(input))

@@ -113,7 +113,6 @@ function OfertaDetalhe() {
     win.document.close();
   };
 
-
   return (
     <AppShell
       title={offer.productName}
@@ -273,9 +272,7 @@ function OfertaDetalhe() {
             <Accordion type="single" collapsible>
               {offer.faq.map((item, index) => (
                 <AccordionItem key={item.question} value={`faq-${index}`}>
-                  <AccordionTrigger className="text-left text-sm">
-                    {item.question}
-                  </AccordionTrigger>
+                  <AccordionTrigger className="text-left text-sm">{item.question}</AccordionTrigger>
                   <AccordionContent className="text-sm text-muted-foreground">
                     {item.answer}
                   </AccordionContent>
@@ -298,7 +295,6 @@ function OfertaDetalhe() {
                 <Wand2 className="size-4" /> Personalizar página
               </Link>
             </Button>
-
           </div>
           <div className="surface-card overflow-hidden">
             <div

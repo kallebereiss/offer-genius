@@ -164,7 +164,9 @@ function PersonalizarLanding() {
                 <Textarea
                   value={landing[field.key]}
                   rows={field.rows}
-                  onChange={(event) => patch({ [field.key]: event.target.value } as Partial<Landing>)}
+                  onChange={(event) =>
+                    patch({ [field.key]: event.target.value } as Partial<Landing>)
+                  }
                   className="resize-none"
                 />
               </div>
