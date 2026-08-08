@@ -86,6 +86,7 @@ export const landingSchema = z.object({
   transformation: z.string(),
   stack: z.array(z.string()),
   finalCta: z.string(),
+  heroImage: z.string().nullable().optional(),
 });
 
 export type Landing = z.infer<typeof landingSchema>;

@@ -92,6 +92,7 @@ footer{padding:32px 0;text-align:center;color:var(--muted);font-size:13px}
     <span class="eyebrow">${esc(brief.nicho)} · ${esc(brief.formato)}</span>
     <h1>${esc(landing.heroHeadline)}</h1>
     <p>${esc(landing.heroSubheadline)}</p>
+    ${landing.heroImage ? `<img src="${landing.heroImage}" alt="${esc(offer.productName)}" style="max-width:100%;border-radius:16px;margin:0 auto 24px;display:block;box-shadow:0 20px 50px rgba(0,0,0,.25)" />` : ""}
     <a class="btn" href="#comprar">${cta}</a>
     <div class="price">${esc(brief.preco)} · ${esc(offer.urgency)}</div>
   </div>

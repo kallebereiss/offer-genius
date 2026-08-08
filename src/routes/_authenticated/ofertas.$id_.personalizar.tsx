@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { ArrowLeft, Loader2, Send, Sparkles } from "lucide-react";
+import { ArrowLeft, ImageIcon, Loader2, Send, Sparkles, X } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/layout/AppShell";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { updateOffer, useHydrated, useProject } from "@/lib/projects-store";
 import { offerToLandingHtml } from "@/lib/export-landing";
-import { editLandingWithAi } from "@/lib/offers.functions";
+import { editLandingWithAi, generateLandingImage } from "@/lib/offers.functions";
 import type { Landing } from "@/lib/offer-schema";
 import { cn } from "@/lib/utils";
 
@@ -35,7 +35,7 @@ export const Route = createFileRoute("/_authenticated/ofertas/$id_/personalizar"
   component: PersonalizarLanding,
 });
 
-type ChatMessage = { role: "user" | "assistant"; content: string };
+type ChatMessage = { role: "user" | "assistant"; content: string; imageBase64?: string };
 
 const FIELDS: { key: keyof Omit<Landing, "stack">; label: string; rows: number }[] = [
   { key: "heroHeadline", label: "Headline principal", rows: 2 },
@@ -50,12 +50,28 @@ function PersonalizarLanding() {
   const project = useProject(id);
   const hydrated = useHydrated();
   const runEdit = useServerFn(editLandingWithAi);
+  const runGenerateImage = useServerFn(generateLandingImage);
 
   const [landing, setLanding] = useState<Landing | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [pendingImage, setPendingImage] = useState<string | null>(null);
+  const [imagePrompt, setImagePrompt] = useState("");
+  const [generatingImage, setGeneratingImage] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function readImageFromClipboard(event: React.ClipboardEvent, onImage: (dataUrl: string) => void) {
+    const item = Array.from(event.clipboardData.items).find((i) => i.type.startsWith("image/"));
+    if (!item) return false;
+    const file = item.getAsFile();
+    if (!file) return false;
+    event.preventDefault();
+    const reader = new FileReader();
+    reader.onload = () => onImage(reader.result as string);
+    reader.readAsDataURL(file);
+    return true;
+  }
 
   useEffect(() => {
     if (project && !landing) setLanding(project.offer.landing);
@@ -107,11 +123,16 @@ function PersonalizarLanding() {
     );
   }
 
-  const handleSend = async () => {
+const handleSend = async () => {
     const request = input.trim();
     if (!request || loading) return;
     setInput("");
-    setMessages((current) => [...current, { role: "user", content: request }]);
+    const attachedImage = pendingImage;
+    setPendingImage(null);
+    setMessages((current) => [
+      ...current,
+      { role: "user", content: request, imageBase64: attachedImage ?? undefined },
+    ]);
     setLoading(true);
     try {
       const updated = await runEdit({
@@ -119,6 +140,7 @@ function PersonalizarLanding() {
           landing,
           request,
           context: `${project.offer.productName} — ${project.offer.bigPromise}. Público: ${project.brief.publico}. Preço: ${project.brief.preco}. Tom de voz: ${project.offer.toneOfVoice}.`,
+          imageBase64: attachedImage ?? undefined,
         },
       });
       setLanding(updated);
@@ -133,6 +155,20 @@ function PersonalizarLanding() {
       setMessages((current) => [...current, { role: "assistant", content: message }]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleGenerateImage = async () => {
+    if (!imagePrompt.trim() || generatingImage) return;
+    setGeneratingImage(true);
+    try {
+      const { imageBase64 } = await runGenerateImage({ data: { prompt: imagePrompt.trim() } });
+      patch({ heroImage: imageBase64 });
+      toast.success("Imagem gerada e aplicada na página.");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Não foi possível gerar a imagem.");
+    } finally {
+      setGeneratingImage(false);
     }
   };
 
@@ -189,6 +225,49 @@ function PersonalizarLanding() {
                 onChange={(event) => patch({ finalCta: event.target.value })}
               />
             </div>
+
+            <div
+              className="space-y-2 rounded-lg border border-dashed p-3"
+              onPaste={(event) => readImageFromClipboard(event, (dataUrl) => patch({ heroImage: dataUrl }))}
+            >
+              <Label className="text-xs">Imagem principal (cole com Ctrl+V ou gere com IA)</Label>
+              {landing.heroImage ? (
+                <div className="relative w-fit">
+                  <img src={landing.heroImage} alt="Imagem principal" className="max-h-32 rounded-md border" />
+                  <button
+                    type="button"
+                    onClick={() => patch({ heroImage: null })}
+                    className="absolute -right-2 -top-2 flex size-5 items-center justify-center rounded-full bg-destructive text-destructive-foreground"
+                    aria-label="Remover imagem"
+                  >
+                    <X className="size-3" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex h-20 items-center justify-center rounded-md bg-muted text-xs text-muted-foreground">
+                  <ImageIcon className="mr-1.5 size-4" /> Clique aqui e cole (Ctrl+V) uma imagem
+                </div>
+              )}
+              <div className="flex gap-2">
+                <Input
+                  value={imagePrompt}
+                  onChange={(event) => setImagePrompt(event.target.value)}
+                  placeholder="Descreva a imagem que a IA deve gerar..."
+                  disabled={generatingImage}
+                />
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={handleGenerateImage}
+                  disabled={generatingImage || !imagePrompt.trim()}
+                  className="shrink-0 gap-1.5"
+                >
+                  {generatingImage ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
+                  Gerar
+                </Button>
+              </div>
+            </div>
           </div>
 
           <div className="surface-card flex min-h-[320px] flex-col p-5">
@@ -213,6 +292,9 @@ function PersonalizarLanding() {
                         : "bg-muted text-muted-foreground",
                     )}
                   >
+                    {message.imageBase64 && (
+                      <img src={message.imageBase64} alt="Anexo" className="mb-1.5 max-h-24 rounded-md" />
+                    )}
                     {message.content}
                   </div>
                 ))
@@ -224,14 +306,28 @@ function PersonalizarLanding() {
               )}
             </div>
 
+            {pendingImage && (
+              <div className="relative mt-3 w-fit">
+                <img src={pendingImage} alt="Imagem anexada" className="max-h-20 rounded-md border" />
+                <button
+                  type="button"
+                  onClick={() => setPendingImage(null)}
+                  className="absolute -right-2 -top-2 flex size-5 items-center justify-center rounded-full bg-destructive text-destructive-foreground"
+                  aria-label="Remover imagem anexada"
+                >
+                  <X className="size-3" />
+                </button>
+              </div>
+            )}
             <div className="mt-4 flex gap-2">
               <Input
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
+                onPaste={(event) => readImageFromClipboard(event, setPendingImage)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter") void handleSend();
                 }}
-                placeholder="O que você quer mudar?"
+                placeholder="O que você quer mudar? (cole uma imagem com Ctrl+V se quiser)"
                 disabled={loading}
               />
               <Button onClick={() => void handleSend()} disabled={loading} className="gap-1.5">

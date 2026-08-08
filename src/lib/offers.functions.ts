@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { streamText, Output, NoObjectGeneratedError } from "ai";
+import { streamText, generateText, Output, NoObjectGeneratedError, type ModelMessage } from "ai";
 import { z } from "zod";
 import { createLovableAiGatewayProvider } from "./ai-gateway.server";
 import {
@@ -87,6 +87,7 @@ const editLandingInput = z.object({
   landing: landingSchema,
   request: z.string(),
   context: z.string(),
+  imageBase64: z.string().optional(),
 });
 
 export const editLandingWithAi = createServerFn({ method: "POST" })
@@ -99,17 +100,33 @@ export const editLandingWithAi = createServerFn({ method: "POST" })
       structuredOutputs: true,
     });
 
-    const prompt = `Contexto da oferta:\n${data.context}\n\nPágina de vendas atual (JSON):\n${JSON.stringify(
+    const textPrompt = `Contexto da oferta:\n${data.context}\n\nPágina de vendas atual (JSON):\n${JSON.stringify(
       data["landing"],
       null,
       2,
-    )}\n\nPedido do usuário: ${data.request}\n\nDevolva o objeto landing COMPLETO atualizado, mantendo todos os campos preenchidos. Altere apenas o que o pedido exige e preserve o resto.`;
+    )}\n\nPedido do usuário: ${data.request}${
+      data.imageBase64
+        ? "\n\nO usuário anexou uma imagem de referência — leve em conta o que está nela ao aplicar o pedido."
+        : ""
+    }\n\nDevolva o objeto landing COMPLETO atualizado, mantendo todos os campos preenchidos. Altere apenas o que o pedido exige e preserve o resto. Não altere o campo heroImage.`;
+
+    const messages: ModelMessage[] = data.imageBase64
+      ? [
+          {
+            role: "user",
+            content: [
+              { type: "text", text: textPrompt },
+              { type: "image", image: data.imageBase64 },
+            ],
+          },
+        ]
+      : [{ role: "user", content: textPrompt }];
 
     try {
       const result = streamText({
         model: gateway(AI_MODEL),
         system: OFFER_SYSTEM_PROMPT,
-        prompt,
+        messages,
         output: Output.object({ schema: landingSchema }),
       });
       return await result.output;
@@ -123,6 +140,31 @@ export const editLandingWithAi = createServerFn({ method: "POST" })
         }
       }
       throw error;
+    }
+  });
+
+const generateImageInput = z.object({ prompt: z.string().min(1) });
+
+export const generateLandingImage = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => generateImageInput.parse(input))
+  .handler(async ({ data }) => {
+    const key = process.env["LOVABLE_API_KEY"];
+    if (!key) throw new Error("Configuração de IA ausente.");
+
+    const gateway = createLovableAiGatewayProvider(key);
+
+    try {
+      const result = await generateText({
+        model: gateway("google/gemini-2.5-flash-image"),
+        prompt: `Imagem publicitária profissional para o topo de uma página de vendas. ${data.prompt}. Estilo realista, bem iluminado, composição limpa, sem texto sobreposto, pronta para uso comercial.`,
+      });
+      const file = result.files?.find((f) => f.mediaType?.startsWith("image/"));
+      if (!file) throw new Error("A IA não retornou uma imagem. Tente descrever de outro jeito.");
+      return { imageBase64: `data:${file.mediaType};base64,${file.base64}` };
+    } catch (error) {
+      throw new Error(
+        error instanceof Error ? error.message : "Não foi possível gerar a imagem.",
+      );
     }
   });
 
