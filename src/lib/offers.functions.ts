@@ -58,7 +58,6 @@ export const generateOfferCore = createServerFn({ method: "POST" })
   .handler(({ data }) =>
     generatePart(
       offerCoreSchema,
-  landingSchema,
       "Crie o núcleo de uma oferta digital low ticket pronta para vender: produto, nome, posicionamento, avatar, promessa, headline, bullets, módulos, bônus, garantia, objeções, FAQ, CTAs e ideias de nome.",
       data,
     ),
