@@ -24,6 +24,7 @@ import { Route as AuthenticatedNovaOfertaRouteImport } from './routes/_authentic
 import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
 import { Route as AuthenticatedOfertasIndexRouteImport } from './routes/_authenticated/ofertas.index'
 import { Route as AuthenticatedOfertasIdRouteImport } from './routes/_authenticated/ofertas.$id'
+import { Route as AuthenticatedOfertasIdPersonalizarRouteImport } from './routes/_authenticated/ofertas.$id_.personalizar'
 
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
@@ -101,6 +102,12 @@ const AuthenticatedOfertasIdRoute = AuthenticatedOfertasIdRouteImport.update({
   path: '/ofertas/$id',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedOfertasIdPersonalizarRoute =
+  AuthenticatedOfertasIdPersonalizarRouteImport.update({
+    id: '/ofertas/$id_/personalizar',
+    path: '/ofertas/$id/personalizar',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof AuthenticatedIndexRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/templates': typeof AuthenticatedTemplatesRoute
   '/ofertas/$id': typeof AuthenticatedOfertasIdRoute
   '/ofertas/': typeof AuthenticatedOfertasIndexRoute
+  '/ofertas/$id/personalizar': typeof AuthenticatedOfertasIdPersonalizarRoute
 }
 export interface FileRoutesByTo {
   '/cadastro': typeof CadastroRoute
@@ -133,6 +141,7 @@ export interface FileRoutesByTo {
   '/': typeof AuthenticatedIndexRoute
   '/ofertas/$id': typeof AuthenticatedOfertasIdRoute
   '/ofertas': typeof AuthenticatedOfertasIndexRoute
+  '/ofertas/$id/personalizar': typeof AuthenticatedOfertasIdPersonalizarRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -151,6 +160,7 @@ export interface FileRoutesById {
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/ofertas/$id': typeof AuthenticatedOfertasIdRoute
   '/_authenticated/ofertas/': typeof AuthenticatedOfertasIndexRoute
+  '/_authenticated/ofertas/$id_/personalizar': typeof AuthenticatedOfertasIdPersonalizarRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -169,6 +179,7 @@ export interface FileRouteTypes {
     | '/templates'
     | '/ofertas/$id'
     | '/ofertas/'
+    | '/ofertas/$id/personalizar'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/cadastro'
@@ -185,6 +196,7 @@ export interface FileRouteTypes {
     | '/'
     | '/ofertas/$id'
     | '/ofertas'
+    | '/ofertas/$id/personalizar'
   id:
     | '__root__'
     | '/_authenticated'
@@ -202,6 +214,7 @@ export interface FileRouteTypes {
     | '/_authenticated/'
     | '/_authenticated/ofertas/$id'
     | '/_authenticated/ofertas/'
+    | '/_authenticated/ofertas/$id_/personalizar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -321,6 +334,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOfertasIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/ofertas/$id_/personalizar': {
+      id: '/_authenticated/ofertas/$id_/personalizar'
+      path: '/ofertas/$id/personalizar'
+      fullPath: '/ofertas/$id/personalizar'
+      preLoaderRoute: typeof AuthenticatedOfertasIdPersonalizarRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -333,6 +353,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedOfertasIdRoute: typeof AuthenticatedOfertasIdRoute
   AuthenticatedOfertasIndexRoute: typeof AuthenticatedOfertasIndexRoute
+  AuthenticatedOfertasIdPersonalizarRoute: typeof AuthenticatedOfertasIdPersonalizarRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -344,6 +365,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedOfertasIdRoute: AuthenticatedOfertasIdRoute,
   AuthenticatedOfertasIndexRoute: AuthenticatedOfertasIndexRoute,
+  AuthenticatedOfertasIdPersonalizarRoute:
+    AuthenticatedOfertasIdPersonalizarRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

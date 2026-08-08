@@ -293,6 +293,12 @@ function OfertaDetalhe() {
             <Button size="sm" variant="outline" onClick={handleDownloadLanding} className="gap-1.5">
               <Download className="size-4" /> Baixar HTML
             </Button>
+            <Button asChild size="sm" variant="outline" className="gap-1.5">
+              <Link to="/ofertas/$id/personalizar" params={{ id }}>
+                <Wand2 className="size-4" /> Personalizar página
+              </Link>
+            </Button>
+
           </div>
           <div className="surface-card overflow-hidden">
             <div
