@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
-import { Download, ExternalLink, Sparkles } from "lucide-react";
+import { Download, ExternalLink, Sparkles, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/layout/AppShell";
 import { Button } from "@/components/ui/button";
@@ -112,7 +112,6 @@ function OfertaDetalhe() {
     win.document.write(offerToLandingHtml(project));
     win.document.close();
   };
-
 
   return (
     <AppShell
@@ -273,9 +272,7 @@ function OfertaDetalhe() {
             <Accordion type="single" collapsible>
               {offer.faq.map((item, index) => (
                 <AccordionItem key={item.question} value={`faq-${index}`}>
-                  <AccordionTrigger className="text-left text-sm">
-                    {item.question}
-                  </AccordionTrigger>
+                  <AccordionTrigger className="text-left text-sm">{item.question}</AccordionTrigger>
                   <AccordionContent className="text-sm text-muted-foreground">
                     {item.answer}
                   </AccordionContent>
@@ -292,6 +289,11 @@ function OfertaDetalhe() {
             </Button>
             <Button size="sm" variant="outline" onClick={handleDownloadLanding} className="gap-1.5">
               <Download className="size-4" /> Baixar HTML
+            </Button>
+            <Button asChild size="sm" variant="outline" className="gap-1.5">
+              <Link to="/ofertas/$id/personalizar" params={{ id }}>
+                <Wand2 className="size-4" /> Personalizar página
+              </Link>
             </Button>
           </div>
           <div className="surface-card overflow-hidden">

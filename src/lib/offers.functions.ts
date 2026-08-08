@@ -8,6 +8,7 @@ import {
   briefSchema,
   offerAssetsSchema,
   offerCoreSchema,
+  landingSchema,
   offerResearchSchema,
   type Brief,
 } from "./offer-schema";
@@ -82,6 +83,48 @@ export const generateOfferResearch = createServerFn({ method: "POST" })
     ),
   );
 
+const editLandingInput = z.object({
+  landing: landingSchema,
+  request: z.string(),
+  context: z.string(),
+});
+
+export const editLandingWithAi = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => editLandingInput.parse(input))
+  .handler(async ({ data }) => {
+    const key = process.env["LOVABLE_API_KEY"];
+    if (!key) throw new Error("Configuração de IA ausente.");
+
+    const gateway = createLovableAiGatewayProvider(key, undefined, {
+      structuredOutputs: true,
+    });
+
+    const prompt = `Contexto da oferta:\n${data.context}\n\nPágina de vendas atual (JSON):\n${JSON.stringify(
+      data["landing"],
+      null,
+      2,
+    )}\n\nPedido do usuário: ${data.request}\n\nDevolva o objeto landing COMPLETO atualizado, mantendo todos os campos preenchidos. Altere apenas o que o pedido exige e preserve o resto.`;
+
+    try {
+      const result = streamText({
+        model: gateway(AI_MODEL),
+        system: OFFER_SYSTEM_PROMPT,
+        prompt,
+        output: Output.object({ schema: landingSchema }),
+      });
+      return await result.output;
+    } catch (error) {
+      if (NoObjectGeneratedError.isInstance(error)) {
+        try {
+          const raw = (error.text ?? "").replace(/^```json|```$/g, "").trim();
+          return landingSchema.parse(JSON.parse(raw));
+        } catch {
+          throw new Error("A IA não conseguiu ajustar a página. Tente novamente.");
+        }
+      }
+      throw error;
+    }
+  });
 
 const textInput = z.object({
   task: z.string(),

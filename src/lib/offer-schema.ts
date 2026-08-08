@@ -39,13 +39,7 @@ export const FORMATOS = [
   "Pacote",
 ] as const;
 
-export const OBJETIVOS = [
-  "Vender",
-  "Captar Leads",
-  "Upsell",
-  "Order Bump",
-  "Tripwire",
-] as const;
+export const OBJETIVOS = ["Vender", "Captar Leads", "Upsell", "Order Bump", "Tripwire"] as const;
 
 export const briefSchema = z.object({
   nicho: z.string(),
@@ -84,20 +78,22 @@ export const offerCoreSchema = z.object({
   nameIdeas: z.array(z.string()),
 });
 
+export const landingSchema = z.object({
+  heroHeadline: z.string(),
+  heroSubheadline: z.string(),
+  painSection: z.string(),
+  desireSection: z.string(),
+  transformation: z.string(),
+  stack: z.array(z.string()),
+  finalCta: z.string(),
+});
+
+export type Landing = z.infer<typeof landingSchema>;
+
 export const offerAssetsSchema = z.object({
-  landing: z.object({
-    heroHeadline: z.string(),
-    heroSubheadline: z.string(),
-    painSection: z.string(),
-    desireSection: z.string(),
-    transformation: z.string(),
-    stack: z.array(z.string()),
-    finalCta: z.string(),
-  }),
+  landing: landingSchema,
   funnel: z.array(z.object({ stage: z.string(), description: z.string() })),
-  creatives: z.array(
-    z.object({ format: z.string(), hook: z.string(), script: z.string() }),
-  ),
+  creatives: z.array(z.object({ format: z.string(), hook: z.string(), script: z.string() })),
   emails: z.array(z.object({ subject: z.string(), body: z.string() })),
 });
 
@@ -129,7 +125,6 @@ export const offerSchema = offerCoreSchema
   .extend(offerResearchSchema.shape);
 
 export type GeneratedOffer = z.infer<typeof offerSchema>;
-
 
 export type OfferProject = {
   id: string;
