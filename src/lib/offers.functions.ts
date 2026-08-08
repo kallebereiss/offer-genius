@@ -8,6 +8,7 @@ import {
   briefSchema,
   offerAssetsSchema,
   offerCoreSchema,
+  landingSchema,
   offerResearchSchema,
   type Brief,
 } from "./offer-schema";
@@ -57,6 +58,7 @@ export const generateOfferCore = createServerFn({ method: "POST" })
   .handler(({ data }) =>
     generatePart(
       offerCoreSchema,
+  landingSchema,
       "Crie o núcleo de uma oferta digital low ticket pronta para vender: produto, nome, posicionamento, avatar, promessa, headline, bullets, módulos, bônus, garantia, objeções, FAQ, CTAs e ideias de nome.",
       data,
     ),
@@ -100,7 +102,7 @@ export const editLandingWithAi = createServerFn({ method: "POST" })
     });
 
     const prompt = `Contexto da oferta:\n${data.context}\n\nPágina de vendas atual (JSON):\n${JSON.stringify(
-      data.landing,
+      data["landing"],
       null,
       2,
     )}\n\nPedido do usuário: ${data.request}\n\nDevolva o objeto landing COMPLETO atualizado, mantendo todos os campos preenchidos. Altere apenas o que o pedido exige e preserve o resto.`;
