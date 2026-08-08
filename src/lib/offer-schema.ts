@@ -84,16 +84,20 @@ export const offerCoreSchema = z.object({
   nameIdeas: z.array(z.string()),
 });
 
+export const landingSchema = z.object({
+  heroHeadline: z.string(),
+  heroSubheadline: z.string(),
+  painSection: z.string(),
+  desireSection: z.string(),
+  transformation: z.string(),
+  stack: z.array(z.string()),
+  finalCta: z.string(),
+});
+
+export type Landing = z.infer<typeof landingSchema>;
+
 export const offerAssetsSchema = z.object({
-  landing: z.object({
-    heroHeadline: z.string(),
-    heroSubheadline: z.string(),
-    painSection: z.string(),
-    desireSection: z.string(),
-    transformation: z.string(),
-    stack: z.array(z.string()),
-    finalCta: z.string(),
-  }),
+  landing: landingSchema,
   funnel: z.array(z.object({ stage: z.string(), description: z.string() })),
   creatives: z.array(
     z.object({ format: z.string(), hook: z.string(), script: z.string() }),
