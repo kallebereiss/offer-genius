@@ -403,7 +403,6 @@ function PersonalizarLanding() {
                 <span className="sr-only sm:hidden">Enviar pedido para a IA</span>
               </Button>
             </form>
-
           </div>
         </div>
 
