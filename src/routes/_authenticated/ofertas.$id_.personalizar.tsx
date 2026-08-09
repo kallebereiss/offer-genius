@@ -35,9 +35,15 @@ export const Route = createFileRoute("/_authenticated/ofertas/$id_/personalizar"
   component: PersonalizarLanding,
 });
 
-type ChatMessage = { role: "user" | "assistant"; content: string; imageBase64?: string };
+type ChatMessage = {
+  role: "user" | "assistant";
+  content: string;
+  imageBase64?: string | undefined;
+};
 
-const FIELDS: { key: keyof Omit<Landing, "stack">; label: string; rows: number }[] = [
+type TextFieldKey = "heroHeadline" | "heroSubheadline" | "painSection" | "desireSection" | "transformation";
+
+const FIELDS: { key: TextFieldKey; label: string; rows: number }[] = [
   { key: "heroHeadline", label: "Headline principal", rows: 2 },
   { key: "heroSubheadline", label: "Subheadline", rows: 2 },
   { key: "painSection", label: "Seção de dores", rows: 4 },
