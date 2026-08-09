@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowLeft, ImageIcon, Loader2, Send, Sparkles, X } from "lucide-react";
@@ -54,6 +54,7 @@ const FIELDS: { key: TextFieldKey; label: string; rows: number }[] = [
 
 function PersonalizarLanding() {
   const { id } = useParams({ from: "/_authenticated/ofertas/$id_/personalizar" });
+  const uid = useId();
   const project = useProject(id);
   const hydrated = useHydrated();
   const runEdit = useServerFn(editLandingWithAi);
