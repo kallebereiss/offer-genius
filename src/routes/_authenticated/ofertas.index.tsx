@@ -70,17 +70,11 @@ function OfertasPage() {
                   onClick={() => updateProject(project.id, { favorite: !project.favorite })}
                   className="text-muted-foreground transition-colors hover:text-primary"
                 >
-                  <Star
-                    className={cn("size-4", project.favorite && "fill-primary text-primary")}
-                  />
+                  <Star className={cn("size-4", project.favorite && "fill-primary text-primary")} />
                 </button>
               </div>
 
-              <Link
-                to="/ofertas/$id"
-                params={{ id: project.id }}
-                className="mt-3 block flex-1"
-              >
+              <Link to="/ofertas/$id" params={{ id: project.id }} className="mt-3 block flex-1">
                 <h3 className="text-base font-semibold leading-snug">
                   {project.offer.productName}
                 </h3>

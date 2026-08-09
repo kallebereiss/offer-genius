@@ -27,7 +27,8 @@ export const signIn = createServerFn({ method: "POST" })
       email: data.email,
       password: data.password,
     });
-    if (error) return { success: false as const, error: describeAuthError(error.message, error.status) };
+    if (error)
+      return { success: false as const, error: describeAuthError(error.message, error.status) };
     return { success: true as const, error: null };
   });
 
@@ -44,7 +45,8 @@ export const signUp = createServerFn({ method: "POST" })
       password: data.password,
       options: { data: { full_name: data.name } },
     });
-    if (error) return { success: false as const, error: describeAuthError(error.message, error.status) };
+    if (error)
+      return { success: false as const, error: describeAuthError(error.message, error.status) };
     return { success: true as const, error: null };
   });
 
@@ -63,11 +65,12 @@ export const updateProfile = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const supabase = getSupabaseServerClient();
     const { error } = await supabase.auth.updateUser({ data: { full_name: data.name } });
-    if (error) return { success: false as const, error: describeAuthError(error.message, error.status) };
+    if (error)
+      return { success: false as const, error: describeAuthError(error.message, error.status) };
     return { success: true as const, error: null };
   });
 
-  const requestResetInput = z.object({
+const requestResetInput = z.object({
   email: z.string().email(),
   redirectTo: z.string().url(),
 });
@@ -79,7 +82,8 @@ export const requestPasswordReset = createServerFn({ method: "POST" })
     const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
       redirectTo: data.redirectTo,
     });
-    if (error) return { success: false as const, error: describeAuthError(error.message, error.status) };
+    if (error)
+      return { success: false as const, error: describeAuthError(error.message, error.status) };
     return { success: true as const, error: null };
   });
 
@@ -90,7 +94,8 @@ export const exchangePasswordResetCode = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const supabase = getSupabaseServerClient();
     const { error } = await supabase.auth.exchangeCodeForSession(data.code);
-    if (error) return { success: false as const, error: describeAuthError(error.message, error.status) };
+    if (error)
+      return { success: false as const, error: describeAuthError(error.message, error.status) };
     return { success: true as const, error: null };
   });
 
@@ -101,7 +106,8 @@ export const updatePassword = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const supabase = getSupabaseServerClient();
     const { error } = await supabase.auth.updateUser({ password: data.password });
-    if (error) return { success: false as const, error: describeAuthError(error.message, error.status) };
+    if (error)
+      return { success: false as const, error: describeAuthError(error.message, error.status) };
     await supabase.auth.signOut();
     return { success: true as const, error: null };
   });

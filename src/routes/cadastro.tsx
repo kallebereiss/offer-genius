@@ -104,8 +104,8 @@ function CadastroPage() {
               <div className="space-y-1">
                 <h2 className="font-display text-xl">Conta criada!</h2>
                 <p className="text-sm text-muted-foreground">
-                  Se a confirmação de e-mail estiver ativa no Supabase, confirme antes de
-                  entrar. Redirecionando para o login...
+                  Se a confirmação de e-mail estiver ativa no Supabase, confirme antes de entrar.
+                  Redirecionando para o login...
                 </p>
               </div>
             </div>
@@ -113,7 +113,9 @@ function CadastroPage() {
             <>
               <div className="space-y-1.5">
                 <h2 className="font-display text-3xl leading-tight">Criar conta</h2>
-                <p className="text-sm text-muted-foreground">Comece a gerar ofertas com IA agora.</p>
+                <p className="text-sm text-muted-foreground">
+                  Comece a gerar ofertas com IA agora.
+                </p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4" noValidate>

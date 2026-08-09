@@ -35,9 +35,16 @@ export const Route = createFileRoute("/_authenticated/ofertas/$id_/personalizar"
   component: PersonalizarLanding,
 });
 
-type ChatMessage = { role: "user" | "assistant"; content: string; imageBase64?: string };
+type ChatMessage = {
+  role: "user" | "assistant";
+  content: string;
+  imageBase64?: string | undefined;
+};
 
-const FIELDS: { key: keyof Omit<Landing, "stack">; label: string; rows: number }[] = [
+type TextFieldKey =
+  "heroHeadline" | "heroSubheadline" | "painSection" | "desireSection" | "transformation";
+
+const FIELDS: { key: TextFieldKey; label: string; rows: number }[] = [
   { key: "heroHeadline", label: "Headline principal", rows: 2 },
   { key: "heroSubheadline", label: "Subheadline", rows: 2 },
   { key: "painSection", label: "Seção de dores", rows: 4 },
@@ -123,7 +130,7 @@ function PersonalizarLanding() {
     );
   }
 
-const handleSend = async () => {
+  const handleSend = async () => {
     const request = input.trim();
     if (!request || loading) return;
     setInput("");
@@ -228,12 +235,18 @@ const handleSend = async () => {
 
             <div
               className="space-y-2 rounded-lg border border-dashed p-3"
-              onPaste={(event) => readImageFromClipboard(event, (dataUrl) => patch({ heroImage: dataUrl }))}
+              onPaste={(event) =>
+                readImageFromClipboard(event, (dataUrl) => patch({ heroImage: dataUrl }))
+              }
             >
               <Label className="text-xs">Imagem principal (cole com Ctrl+V ou gere com IA)</Label>
               {landing.heroImage ? (
                 <div className="relative w-fit">
-                  <img src={landing.heroImage} alt="Imagem principal" className="max-h-32 rounded-md border" />
+                  <img
+                    src={landing.heroImage}
+                    alt="Imagem principal"
+                    className="max-h-32 rounded-md border"
+                  />
                   <button
                     type="button"
                     onClick={() => patch({ heroImage: null })}
@@ -263,7 +276,11 @@ const handleSend = async () => {
                   disabled={generatingImage || !imagePrompt.trim()}
                   className="shrink-0 gap-1.5"
                 >
-                  {generatingImage ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
+                  {generatingImage ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <Sparkles className="size-4" />
+                  )}
                   Gerar
                 </Button>
               </div>
@@ -293,7 +310,11 @@ const handleSend = async () => {
                     )}
                   >
                     {message.imageBase64 && (
-                      <img src={message.imageBase64} alt="Anexo" className="mb-1.5 max-h-24 rounded-md" />
+                      <img
+                        src={message.imageBase64}
+                        alt="Anexo"
+                        className="mb-1.5 max-h-24 rounded-md"
+                      />
                     )}
                     {message.content}
                   </div>
@@ -308,7 +329,11 @@ const handleSend = async () => {
 
             {pendingImage && (
               <div className="relative mt-3 w-fit">
-                <img src={pendingImage} alt="Imagem anexada" className="max-h-20 rounded-md border" />
+                <img
+                  src={pendingImage}
+                  alt="Imagem anexada"
+                  className="max-h-20 rounded-md border"
+                />
                 <button
                   type="button"
                   onClick={() => setPendingImage(null)}

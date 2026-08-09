@@ -81,10 +81,7 @@ export const updateOfferRow = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => updateOfferInput.parse(input))
   .handler(async ({ data }) => {
     const supabase = getSupabaseServerClient();
-    const { error } = await supabase
-      .from("offers")
-      .update({ offer: data.offer })
-      .eq("id", data.id);
+    const { error } = await supabase.from("offers").update({ offer: data.offer }).eq("id", data.id);
     if (error) throw new Error(error.message);
     return { success: true };
   });

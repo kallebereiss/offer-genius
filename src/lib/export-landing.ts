@@ -18,10 +18,7 @@ export function offerToLandingHtml({ brief, offer }: OfferProject): string {
   const bullets = offer.bullets.map((b) => `<li>${esc(b)}</li>`).join("");
   const stack = landing.stack.map((s) => `<li>${esc(s)}</li>`).join("");
   const modules = offer.productModules
-    .map(
-      (m) =>
-        `<div class="card"><h3>${esc(m.title)}</h3><p>${esc(m.description)}</p></div>`,
-    )
+    .map((m) => `<div class="card"><h3>${esc(m.title)}</h3><p>${esc(m.description)}</p></div>`)
     .join("");
   const bonuses = offer.bonuses
     .map(
@@ -30,16 +27,10 @@ export function offerToLandingHtml({ brief, offer }: OfferProject): string {
     )
     .join("");
   const faq = offer.faq
-    .map(
-      (f) =>
-        `<details><summary>${esc(f.question)}</summary><p>${esc(f.answer)}</p></details>`,
-    )
+    .map((f) => `<details><summary>${esc(f.question)}</summary><p>${esc(f.answer)}</p></details>`)
     .join("");
   const objections = offer.objections
-    .map(
-      (o) =>
-        `<div class="card"><h3>${esc(o.objection)}</h3><p>${esc(o.answer)}</p></div>`,
-    )
+    .map((o) => `<div class="card"><h3>${esc(o.objection)}</h3><p>${esc(o.answer)}</p></div>`)
     .join("");
 
   const cta = esc(landing.finalCta || offer.ctas[0] || "Quero agora");

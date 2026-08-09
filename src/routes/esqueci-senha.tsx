@@ -51,11 +51,14 @@ function EsqueciSenhaPage() {
             <div className="space-y-1">
               <h2 className="font-display text-xl">E-mail enviado!</h2>
               <p className="text-sm text-muted-foreground">
-                Se existir uma conta com esse e-mail, você vai receber um link pra redefinir a
-                senha em instantes.
+                Se existir uma conta com esse e-mail, você vai receber um link pra redefinir a senha
+                em instantes.
               </p>
             </div>
-            <Link to="/login" className="inline-block text-sm font-medium underline underline-offset-4">
+            <Link
+              to="/login"
+              className="inline-block text-sm font-medium underline underline-offset-4"
+            >
               Voltar para o login
             </Link>
           </div>
@@ -100,7 +103,10 @@ function EsqueciSenhaPage() {
 
             <p className="text-center text-sm text-muted-foreground">
               Lembrou a senha?{" "}
-              <Link to="/login" className="font-medium text-foreground underline underline-offset-4">
+              <Link
+                to="/login"
+                className="font-medium text-foreground underline underline-offset-4"
+              >
                 Entrar
               </Link>
             </p>

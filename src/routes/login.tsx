@@ -111,7 +111,10 @@ function LoginPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Senha</Label>
-                <Link to="/esqueci-senha" className="text-xs font-medium text-muted-foreground underline underline-offset-4 hover:text-foreground">
+                <Link
+                  to="/esqueci-senha"
+                  className="text-xs font-medium text-muted-foreground underline underline-offset-4 hover:text-foreground"
+                >
                   Esqueceu a senha?
                 </Link>
               </div>
@@ -152,7 +155,10 @@ function LoginPage() {
 
           <p className="text-center text-sm text-muted-foreground">
             Não tem conta?{" "}
-            <Link to="/cadastro" className="font-medium text-foreground underline underline-offset-4">
+            <Link
+              to="/cadastro"
+              className="font-medium text-foreground underline underline-offset-4"
+            >
               Criar conta grátis
             </Link>
           </p>

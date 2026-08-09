@@ -8,15 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import {
-  ArrowUpRight,
-  Coins,
-  Gauge,
-  Lightbulb,
-  Package,
-  Sparkles,
-  TrendingUp,
-} from "lucide-react";
+import { ArrowUpRight, Coins, Gauge, Lightbulb, Package, Sparkles, TrendingUp } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -181,7 +173,11 @@ function DashboardPage() {
                     <stop offset="100%" stopColor="var(--color-chart-2)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="var(--color-border)"
+                  vertical={false}
+                />
                 <XAxis
                   dataKey="mes"
                   tickLine={false}

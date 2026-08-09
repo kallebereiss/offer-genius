@@ -68,7 +68,10 @@ function RedefinirSenhaPage() {
             <p className="text-sm text-muted-foreground">
               {loaderError ?? "Solicite um novo link de redefinição de senha."}
             </p>
-            <Link to="/esqueci-senha" className="inline-block text-sm font-medium underline underline-offset-4">
+            <Link
+              to="/esqueci-senha"
+              className="inline-block text-sm font-medium underline underline-offset-4"
+            >
               Solicitar novo link
             </Link>
           </div>
@@ -84,7 +87,9 @@ function RedefinirSenhaPage() {
           <>
             <div className="space-y-1.5">
               <h2 className="font-display text-3xl leading-tight">Criar nova senha</h2>
-              <p className="text-sm text-muted-foreground">Escolha uma senha com pelo menos 6 caracteres.</p>
+              <p className="text-sm text-muted-foreground">
+                Escolha uma senha com pelo menos 6 caracteres.
+              </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>
