@@ -400,9 +400,9 @@ function PersonalizarLanding() {
                 <Send className="size-4" aria-hidden="true" />
                 <span className="hidden sm:inline">Enviar</span>
                 <span className="sr-only sm:hidden">Enviar pedido para a IA</span>
-
               </Button>
-            </div>
+            </form>
+
           </div>
         </div>
 
