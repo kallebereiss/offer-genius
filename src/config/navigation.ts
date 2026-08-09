@@ -1,4 +1,11 @@
-import { LayoutDashboard, Sparkles, FolderKanban, LibraryBig, PenLine, Settings } from "lucide-react";
+import {
+  LayoutDashboard,
+  Sparkles,
+  FolderKanban,
+  LibraryBig,
+  PenLine,
+  Settings,
+} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 export type NavItem = {

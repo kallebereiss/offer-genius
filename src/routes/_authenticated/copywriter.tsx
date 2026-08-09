@@ -31,14 +31,32 @@ export const Route = createFileRoute("/_authenticated/copywriter")({
 });
 
 const TASKS = [
-  { label: "100 headlines", task: "Gere 100 headlines de alta conversão, agrupadas por estilo (curiosidade, prova, dor, urgência, autoridade)." },
+  {
+    label: "100 headlines",
+    task: "Gere 100 headlines de alta conversão, agrupadas por estilo (curiosidade, prova, dor, urgência, autoridade).",
+  },
   { label: "Promessas", task: "Gere 30 promessas irresistíveis, específicas e mensuráveis." },
-  { label: "Nomes", task: "Gere 60 nomes de produto agrupados em Premium, Urgente, Emocional, Curto, Autoridade, Luxo, Exclusivo, Tecnologia e IA." },
+  {
+    label: "Nomes",
+    task: "Gere 60 nomes de produto agrupados em Premium, Urgente, Emocional, Curto, Autoridade, Luxo, Exclusivo, Tecnologia e IA.",
+  },
   { label: "CTAs", task: "Gere 30 CTAs de botão e de encerramento de página." },
-  { label: "Garantias", task: "Gere garantias de 7, 15 e 30 dias, condicional, total e blindada, com texto pronto." },
-  { label: "Bônus", task: "Gere 8 bônus com nome, descrição, valor percebido e o aumento estimado do valor total da oferta." },
-  { label: "Anúncios Meta", task: "Gere 8 anúncios para Meta Ads com hook, corpo, CTA e sugestão de criativo." },
-  { label: "Scripts Reels", task: "Gere 6 roteiros de Reels de 30 segundos com gancho, desenvolvimento e chamada." },
+  {
+    label: "Garantias",
+    task: "Gere garantias de 7, 15 e 30 dias, condicional, total e blindada, com texto pronto.",
+  },
+  {
+    label: "Bônus",
+    task: "Gere 8 bônus com nome, descrição, valor percebido e o aumento estimado do valor total da oferta.",
+  },
+  {
+    label: "Anúncios Meta",
+    task: "Gere 8 anúncios para Meta Ads com hook, corpo, CTA e sugestão de criativo.",
+  },
+  {
+    label: "Scripts Reels",
+    task: "Gere 6 roteiros de Reels de 30 segundos com gancho, desenvolvimento e chamada.",
+  },
 ];
 
 function CopywriterPage() {
@@ -152,7 +170,8 @@ function CopywriterPage() {
           </div>
           {loading ? (
             <div className="flex flex-1 items-center justify-center text-sm text-muted-foreground">
-              <Loader2 className="mr-2 size-4 animate-spin" /> O agente copywriter está trabalhando...
+              <Loader2 className="mr-2 size-4 animate-spin" /> O agente copywriter está
+              trabalhando...
             </div>
           ) : output ? (
             <pre className="flex-1 overflow-auto whitespace-pre-wrap font-sans text-sm leading-relaxed text-muted-foreground">

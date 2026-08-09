@@ -7,9 +7,9 @@ export function getErrorMessage(err: unknown, fallback: string): string {
       const value = anyErr[key];
       if (typeof value === "string" && value && value !== "{}") return value;
     }
-    const body = anyErr['body'] ?? anyErr['data'];
+    const body = anyErr["body"] ?? anyErr["data"];
     if (body && typeof body === "object") {
-      const nested = (body as Record<string, unknown>)['message'];
+      const nested = (body as Record<string, unknown>)["message"];
       if (typeof nested === "string" && nested) return nested;
     }
   }

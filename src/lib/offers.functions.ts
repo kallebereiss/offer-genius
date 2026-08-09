@@ -162,9 +162,7 @@ export const generateLandingImage = createServerFn({ method: "POST" })
       if (!file) throw new Error("A IA não retornou uma imagem. Tente descrever de outro jeito.");
       return { imageBase64: `data:${file.mediaType};base64,${file.base64}` };
     } catch (error) {
-      throw new Error(
-        error instanceof Error ? error.message : "Não foi possível gerar a imagem.",
-      );
+      throw new Error(error instanceof Error ? error.message : "Não foi possível gerar a imagem.");
     }
   });
 
