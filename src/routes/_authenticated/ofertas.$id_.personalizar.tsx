@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { ArrowLeft, ImageIcon, Loader2, Send, Sparkles, X } from "lucide-react";
@@ -54,6 +54,7 @@ const FIELDS: { key: TextFieldKey; label: string; rows: number }[] = [
 
 function PersonalizarLanding() {
   const { id } = useParams({ from: "/_authenticated/ofertas/$id_/personalizar" });
+  const uid = useId();
   const project = useProject(id);
   const hydrated = useHydrated();
   const runEdit = useServerFn(editLandingWithAi);
@@ -203,8 +204,11 @@ function PersonalizarLanding() {
 
             {FIELDS.map((field) => (
               <div key={field.key} className="space-y-1.5">
-                <Label className="text-xs">{field.label}</Label>
+                <Label htmlFor={`${uid}-${field.key}`} className="text-xs">
+                  {field.label}
+                </Label>
                 <Textarea
+                  id={`${uid}-${field.key}`}
                   value={landing[field.key]}
                   rows={field.rows}
                   onChange={(event) =>
@@ -216,8 +220,11 @@ function PersonalizarLanding() {
             ))}
 
             <div className="space-y-1.5">
-              <Label className="text-xs">Stack de valor (um item por linha)</Label>
+              <Label htmlFor={`${uid}-stack`} className="text-xs">
+                Stack de valor (um item por linha)
+              </Label>
               <Textarea
+                id={`${uid}-stack`}
                 value={landing.stack.join("\n")}
                 rows={6}
                 onChange={(event) => patch({ stack: event.target.value.split("\n") })}
@@ -226,43 +233,56 @@ function PersonalizarLanding() {
             </div>
 
             <div className="space-y-1.5">
-              <Label className="text-xs">CTA final</Label>
+              <Label htmlFor={`${uid}-cta`} className="text-xs">
+                CTA final
+              </Label>
               <Input
+                id={`${uid}-cta`}
                 value={landing.finalCta}
                 onChange={(event) => patch({ finalCta: event.target.value })}
               />
             </div>
 
             <div
-              className="space-y-2 rounded-lg border border-dashed p-3"
+              role="group"
+              aria-label="Imagem principal da página. Cole uma imagem com Ctrl+V ou gere com IA."
+              tabIndex={0}
+              className="space-y-2 rounded-lg border border-dashed p-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               onPaste={(event) =>
                 readImageFromClipboard(event, (dataUrl) => patch({ heroImage: dataUrl }))
               }
             >
-              <Label className="text-xs">Imagem principal (cole com Ctrl+V ou gere com IA)</Label>
+              <span className="block text-xs font-medium">
+                Imagem principal (cole com Ctrl+V ou gere com IA)
+              </span>
               {landing.heroImage ? (
                 <div className="relative w-fit">
                   <img
                     src={landing.heroImage}
-                    alt="Imagem principal"
+                    alt="Pré-visualização da imagem principal da página de vendas"
                     className="max-h-32 rounded-md border"
                   />
                   <button
                     type="button"
                     onClick={() => patch({ heroImage: null })}
-                    className="absolute -right-2 -top-2 flex size-5 items-center justify-center rounded-full bg-destructive text-destructive-foreground"
-                    aria-label="Remover imagem"
+                    className="absolute -right-2 -top-2 flex size-6 items-center justify-center rounded-full bg-destructive text-destructive-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    aria-label="Remover imagem principal"
                   >
-                    <X className="size-3" />
+                    <X className="size-3" aria-hidden="true" />
                   </button>
                 </div>
               ) : (
-                <div className="flex h-20 items-center justify-center rounded-md bg-muted text-xs text-muted-foreground">
-                  <ImageIcon className="mr-1.5 size-4" /> Clique aqui e cole (Ctrl+V) uma imagem
-                </div>
+                <p className="flex h-20 items-center justify-center rounded-md bg-muted text-xs text-muted-foreground">
+                  <ImageIcon className="mr-1.5 size-4" aria-hidden="true" /> Foque esta área e cole
+                  (Ctrl+V) uma imagem
+                </p>
               )}
               <div className="flex gap-2">
+                <Label htmlFor={`${uid}-image-prompt`} className="sr-only">
+                  Descrição da imagem para a IA gerar
+                </Label>
                 <Input
+                  id={`${uid}-image-prompt`}
                   value={imagePrompt}
                   onChange={(event) => setImagePrompt(event.target.value)}
                   placeholder="Descreva a imagem que a IA deve gerar..."
@@ -277,27 +297,38 @@ function PersonalizarLanding() {
                   className="shrink-0 gap-1.5"
                 >
                   {generatingImage ? (
-                    <Loader2 className="size-4 animate-spin" />
+                    <Loader2 className="size-4 animate-spin" aria-hidden="true" />
                   ) : (
-                    <Sparkles className="size-4" />
+                    <Sparkles className="size-4" aria-hidden="true" />
                   )}
                   Gerar
                 </Button>
               </div>
+              <p aria-live="polite" className="sr-only">
+                {generatingImage ? "Gerando imagem com IA..." : ""}
+              </p>
             </div>
           </div>
 
           <div className="surface-card flex min-h-[320px] flex-col p-5">
-            <h2 className="text-sm font-semibold">Editar com IA</h2>
+            <h2 id={`${uid}-chat-title`} className="text-sm font-semibold">
+              Editar com IA
+            </h2>
             <p className="text-xs text-muted-foreground">
               Ex: “deixa o headline mais urgente” ou “reescreve a seção de dores mais emocional”.
             </p>
 
-            <div className="mt-4 flex-1 space-y-3 overflow-auto">
+            <div
+              role="log"
+              aria-live="polite"
+              aria-labelledby={`${uid}-chat-title`}
+              className="mt-4 flex-1 space-y-3 overflow-auto"
+            >
               {messages.length === 0 ? (
-                <div className="flex h-full items-center justify-center px-6 text-center text-sm text-muted-foreground">
-                  <Sparkles className="mr-2 size-4" /> Peça qualquer ajuste na página.
-                </div>
+                <p className="flex h-full items-center justify-center px-6 text-center text-sm text-muted-foreground">
+                  <Sparkles className="mr-2 size-4" aria-hidden="true" /> Peça qualquer ajuste na
+                  página.
+                </p>
               ) : (
                 messages.map((message, index) => (
                   <div
@@ -306,13 +337,16 @@ function PersonalizarLanding() {
                       "max-w-[85%] rounded-xl px-3 py-2 text-sm",
                       message.role === "user"
                         ? "ml-auto bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground",
+                        : "bg-muted text-foreground",
                     )}
                   >
+                    <span className="sr-only">
+                      {message.role === "user" ? "Você: " : "Assistente: "}
+                    </span>
                     {message.imageBase64 && (
                       <img
                         src={message.imageBase64}
-                        alt="Anexo"
+                        alt="Imagem de referência anexada à mensagem"
                         className="mb-1.5 max-h-24 rounded-md"
                       />
                     )}
@@ -321,9 +355,10 @@ function PersonalizarLanding() {
                 ))
               )}
               {loading && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Loader2 className="size-4 animate-spin" /> A IA está reescrevendo a página...
-                </div>
+                <p role="status" className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="size-4 animate-spin" aria-hidden="true" /> A IA está
+                  reescrevendo a página...
+                </p>
               )}
             </div>
 
@@ -331,35 +366,43 @@ function PersonalizarLanding() {
               <div className="relative mt-3 w-fit">
                 <img
                   src={pendingImage}
-                  alt="Imagem anexada"
+                  alt="Imagem anexada ao próximo pedido"
                   className="max-h-20 rounded-md border"
                 />
                 <button
                   type="button"
                   onClick={() => setPendingImage(null)}
-                  className="absolute -right-2 -top-2 flex size-5 items-center justify-center rounded-full bg-destructive text-destructive-foreground"
+                  className="absolute -right-2 -top-2 flex size-6 items-center justify-center rounded-full bg-destructive text-destructive-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   aria-label="Remover imagem anexada"
                 >
-                  <X className="size-3" />
+                  <X className="size-3" aria-hidden="true" />
                 </button>
               </div>
             )}
-            <div className="mt-4 flex gap-2">
+            <form
+              className="mt-4 flex gap-2"
+              onSubmit={(event) => {
+                event.preventDefault();
+                void handleSend();
+              }}
+            >
+              <Label htmlFor={`${uid}-chat-input`} className="sr-only">
+                Descreva a mudança que a IA deve aplicar na página
+              </Label>
               <Input
+                id={`${uid}-chat-input`}
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
                 onPaste={(event) => readImageFromClipboard(event, setPendingImage)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") void handleSend();
-                }}
                 placeholder="O que você quer mudar? (cole uma imagem com Ctrl+V se quiser)"
                 disabled={loading}
               />
-              <Button onClick={() => void handleSend()} disabled={loading} className="gap-1.5">
-                <Send className="size-4" />
+              <Button type="submit" disabled={loading} className="gap-1.5">
+                <Send className="size-4" aria-hidden="true" />
                 <span className="hidden sm:inline">Enviar</span>
+                <span className="sr-only sm:hidden">Enviar pedido para a IA</span>
               </Button>
-            </div>
+            </form>
           </div>
         </div>
 

@@ -30,11 +30,18 @@ export function AppShell({ title, description, actions, children }: AppShellProp
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-background">
+      <div className="flex min-h-dvh w-full bg-background">
+        <a
+          href="#conteudo-principal"
+          className="sr-only rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50"
+        >
+          Pular para o conteúdo
+        </a>
         <AppSidebar />
         <div className="flex min-w-0 flex-1 flex-col">
           <header className="sticky top-0 z-30 glass-panel flex h-14 items-center gap-3 border-x-0 border-t-0 px-3 sm:px-6">
             <SidebarTrigger />
+
             <div className="min-w-0 flex-1">
               <h1 className="truncate text-sm font-semibold sm:text-base">{title}</h1>
               {description && (
@@ -71,7 +78,7 @@ export function AppShell({ title, description, actions, children }: AppShellProp
               </Button>
             </div>
           </header>
-          <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
+          <main id="conteudo-principal" className="flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
             <div className="mx-auto w-full max-w-6xl animate-in fade-in duration-500">
               {children}
             </div>
