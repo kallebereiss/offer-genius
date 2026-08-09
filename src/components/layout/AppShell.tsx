@@ -78,7 +78,7 @@ export function AppShell({ title, description, actions, children }: AppShellProp
               </Button>
             </div>
           </header>
-          <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
+          <main id="conteudo-principal" className="flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
             <div className="mx-auto w-full max-w-6xl animate-in fade-in duration-500">
               {children}
             </div>
