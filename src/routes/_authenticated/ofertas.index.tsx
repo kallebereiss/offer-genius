@@ -177,7 +177,9 @@ function OfertasPage() {
                         aria-label={project.archived ? "Desarquivar oferta" : "Arquivar oferta"}
                         onClick={() => {
                           updateProject(project.id, { archived: !project.archived });
-                          toast.success(project.archived ? "Oferta restaurada" : "Oferta arquivada");
+                          toast.success(
+                            project.archived ? "Oferta restaurada" : "Oferta arquivada",
+                          );
                         }}
                       >
                         {project.archived ? (

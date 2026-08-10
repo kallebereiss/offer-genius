@@ -51,7 +51,6 @@ async function ensureLoaded() {
   await loadPromise;
 }
 
-
 export async function createProject(brief: Brief, offer: GeneratedOffer): Promise<OfferProject> {
   const project: OfferProject = {
     id: crypto.randomUUID(),
@@ -93,7 +92,6 @@ export function deleteProject(id: string) {
   void deleteOfferRow({ data: { id } }).catch(reportFailure("excluir a oferta"));
 }
 
-
 export function duplicateProject(id: string) {
   const source = cache.find((p) => p.id === id);
   if (!source) return;
@@ -109,7 +107,6 @@ export function duplicateProject(id: string) {
   void duplicateOfferRow({ data: { sourceId: id, newId } }).catch(
     reportFailure("duplicar a oferta"),
   );
-
 }
 
 export function useProjects() {
