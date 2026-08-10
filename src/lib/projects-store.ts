@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 import type { Brief, GeneratedOffer, OfferProject } from "./offer-schema";
 import {
   createOfferRow,
@@ -18,6 +19,20 @@ function notify() {
   listeners.forEach((listener) => listener());
 }
 
+function reportFailure(action: string) {
+  return () => {
+    toast.error(`Não foi possível ${action}. Recarregue a página e tente de novo.`);
+  };
+}
+
+/** Clears the in-memory cache so a different account never sees stale offers. */
+export function resetProjects() {
+  cache = [];
+  cacheLoaded = false;
+  loadPromise = null;
+  notify();
+}
+
 async function ensureLoaded() {
   if (cacheLoaded) return;
   if (!loadPromise) {
@@ -30,10 +45,12 @@ async function ensureLoaded() {
       .catch(() => {
         cacheLoaded = true;
         notify();
+        toast.error("Não foi possível carregar suas ofertas.");
       });
   }
   await loadPromise;
 }
+
 
 export async function createProject(brief: Brief, offer: GeneratedOffer): Promise<OfferProject> {
   const project: OfferProject = {
