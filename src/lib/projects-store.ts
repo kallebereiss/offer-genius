@@ -106,7 +106,10 @@ export function duplicateProject(id: string) {
   };
   cache = [duplicated, ...cache];
   notify();
-  void duplicateOfferRow({ data: { sourceId: id, newId } });
+  void duplicateOfferRow({ data: { sourceId: id, newId } }).catch(
+    reportFailure("duplicar a oferta"),
+  );
+
 }
 
 export function useProjects() {
