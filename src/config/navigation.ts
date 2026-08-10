@@ -4,6 +4,7 @@ import {
   FolderKanban,
   LibraryBig,
   PenLine,
+  ShieldCheck,
   Settings,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -32,7 +33,10 @@ export const NAV_GROUPS: NavGroup[] = [
   },
   {
     label: "Criação",
-    items: [{ title: "IA Copywriter", to: "/copywriter", icon: PenLine }],
+    items: [
+      { title: "IA Copywriter", to: "/copywriter", icon: PenLine },
+      { title: "Validador de Oferta", to: "/validador", icon: ShieldCheck },
+    ],
   },
   {
     label: "Conta",

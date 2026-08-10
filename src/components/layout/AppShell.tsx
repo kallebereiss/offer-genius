@@ -7,7 +7,8 @@ import { signOut } from "@/lib/auth.functions";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { AppSidebar } from "./AppSidebar";
-import { useTheme } from "@/lib/projects-store";
+import { resetProjects, useTheme } from "@/lib/projects-store";
+import { CommandPalette } from "./CommandPalette";
 
 type AppShellProps = {
   title: string;
@@ -24,6 +25,7 @@ export function AppShell({ title, description, actions, children }: AppShellProp
 
   const handleSignOut = async () => {
     await runSignOut();
+    resetProjects();
     await router.invalidate();
     navigate({ to: "/login" });
   };
@@ -52,6 +54,7 @@ export function AppShell({ title, description, actions, children }: AppShellProp
             </div>
             <div className="flex items-center gap-2">
               {actions}
+              <CommandPalette />
               <Button
                 variant="ghost"
                 size="icon"
