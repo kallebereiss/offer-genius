@@ -22,6 +22,7 @@ import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authen
 import { Route as AuthenticatedCopywriterRouteImport } from './routes/_authenticated/copywriter'
 import { Route as AuthenticatedNovaOfertaRouteImport } from './routes/_authenticated/nova-oferta'
 import { Route as AuthenticatedTemplatesRouteImport } from './routes/_authenticated/templates'
+import { Route as AuthenticatedValidadorRouteImport } from './routes/_authenticated/validador'
 import { Route as AuthenticatedOfertasIndexRouteImport } from './routes/_authenticated/ofertas.index'
 import { Route as AuthenticatedOfertasIdRouteImport } from './routes/_authenticated/ofertas.$id'
 import { Route as AuthenticatedOfertasIdPersonalizarRouteImport } from './routes/_authenticated/ofertas.$id_.personalizar'
@@ -91,6 +92,11 @@ const AuthenticatedTemplatesRoute = AuthenticatedTemplatesRouteImport.update({
   path: '/templates',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedValidadorRoute = AuthenticatedValidadorRouteImport.update({
+  id: '/validador',
+  path: '/validador',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedOfertasIndexRoute =
   AuthenticatedOfertasIndexRouteImport.update({
     id: '/ofertas/',
@@ -122,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/copywriter': typeof AuthenticatedCopywriterRoute
   '/nova-oferta': typeof AuthenticatedNovaOfertaRoute
   '/templates': typeof AuthenticatedTemplatesRoute
+  '/validador': typeof AuthenticatedValidadorRoute
   '/ofertas/$id': typeof AuthenticatedOfertasIdRoute
   '/ofertas/': typeof AuthenticatedOfertasIndexRoute
   '/ofertas/$id/personalizar': typeof AuthenticatedOfertasIdPersonalizarRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/copywriter': typeof AuthenticatedCopywriterRoute
   '/nova-oferta': typeof AuthenticatedNovaOfertaRoute
   '/templates': typeof AuthenticatedTemplatesRoute
+  '/validador': typeof AuthenticatedValidadorRoute
   '/': typeof AuthenticatedIndexRoute
   '/ofertas/$id': typeof AuthenticatedOfertasIdRoute
   '/ofertas': typeof AuthenticatedOfertasIndexRoute
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/_authenticated/copywriter': typeof AuthenticatedCopywriterRoute
   '/_authenticated/nova-oferta': typeof AuthenticatedNovaOfertaRoute
   '/_authenticated/templates': typeof AuthenticatedTemplatesRoute
+  '/_authenticated/validador': typeof AuthenticatedValidadorRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/ofertas/$id': typeof AuthenticatedOfertasIdRoute
   '/_authenticated/ofertas/': typeof AuthenticatedOfertasIndexRoute
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/copywriter'
     | '/nova-oferta'
     | '/templates'
+    | '/validador'
     | '/ofertas/$id'
     | '/ofertas/'
     | '/ofertas/$id/personalizar'
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/copywriter'
     | '/nova-oferta'
     | '/templates'
+    | '/validador'
     | '/'
     | '/ofertas/$id'
     | '/ofertas'
@@ -211,6 +222,7 @@ export interface FileRouteTypes {
     | '/_authenticated/copywriter'
     | '/_authenticated/nova-oferta'
     | '/_authenticated/templates'
+    | '/_authenticated/validador'
     | '/_authenticated/'
     | '/_authenticated/ofertas/$id'
     | '/_authenticated/ofertas/'
@@ -320,6 +332,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTemplatesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/validador': {
+      id: '/_authenticated/validador'
+      path: '/validador'
+      fullPath: '/validador'
+      preLoaderRoute: typeof AuthenticatedValidadorRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/ofertas/': {
       id: '/_authenticated/ofertas/'
       path: '/ofertas'
@@ -350,6 +369,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedCopywriterRoute: typeof AuthenticatedCopywriterRoute
   AuthenticatedNovaOfertaRoute: typeof AuthenticatedNovaOfertaRoute
   AuthenticatedTemplatesRoute: typeof AuthenticatedTemplatesRoute
+  AuthenticatedValidadorRoute: typeof AuthenticatedValidadorRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedOfertasIdRoute: typeof AuthenticatedOfertasIdRoute
   AuthenticatedOfertasIndexRoute: typeof AuthenticatedOfertasIndexRoute
@@ -362,6 +382,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedCopywriterRoute: AuthenticatedCopywriterRoute,
   AuthenticatedNovaOfertaRoute: AuthenticatedNovaOfertaRoute,
   AuthenticatedTemplatesRoute: AuthenticatedTemplatesRoute,
+  AuthenticatedValidadorRoute: AuthenticatedValidadorRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedOfertasIdRoute: AuthenticatedOfertasIdRoute,
   AuthenticatedOfertasIndexRoute: AuthenticatedOfertasIndexRoute,

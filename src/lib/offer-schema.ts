@@ -140,3 +140,22 @@ export const OFFER_SYSTEM_PROMPT = `Você é um estrategista de ofertas low tick
 Escreva SEMPRE em português do Brasil, com linguagem específica, concreta e persuasiva — nunca genérica.
 Nunca use placeholders como "[nome]" ou "seu produto". Seja específico e comercialmente pronto para publicar.
 Limites (respeite mesmo sem validação automática): 8 a 12 bullets, 4 a 8 módulos de produto, 3 a 5 bônus, 4 a 6 objeções, 5 a 8 FAQs, 5 CTAs, 12 sugestões de nome, 5 etapas de funil, 5 criativos, 4 e-mails, 6 passos de lançamento, 5 sugestões de melhoria. Notas de score entre 0 e 100.`;
+
+export const offerValidationSchema = z.object({
+  total: z.number(),
+  verdict: z.string(),
+  criteria: z.array(
+    z.object({
+      name: z.string(),
+      score: z.number(),
+      analysis: z.string(),
+    }),
+  ),
+  strengths: z.array(z.string()),
+  weaknesses: z.array(z.string()),
+  quickWins: z.array(z.string()),
+  rewrittenPromise: z.string(),
+  rewrittenHeadline: z.string(),
+});
+
+export type OfferValidation = z.infer<typeof offerValidationSchema>;

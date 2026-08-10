@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { toast } from "sonner";
 import type { Brief, GeneratedOffer, OfferProject } from "./offer-schema";
 import {
   createOfferRow,
@@ -18,6 +19,20 @@ function notify() {
   listeners.forEach((listener) => listener());
 }
 
+function reportFailure(action: string) {
+  return () => {
+    toast.error(`Não foi possível ${action}. Recarregue a página e tente de novo.`);
+  };
+}
+
+/** Clears the in-memory cache so a different account never sees stale offers. */
+export function resetProjects() {
+  cache = [];
+  cacheLoaded = false;
+  loadPromise = null;
+  notify();
+}
+
 async function ensureLoaded() {
   if (cacheLoaded) return;
   if (!loadPromise) {
@@ -30,6 +45,7 @@ async function ensureLoaded() {
       .catch(() => {
         cacheLoaded = true;
         notify();
+        toast.error("Não foi possível carregar suas ofertas.");
       });
   }
   await loadPromise;
@@ -54,7 +70,9 @@ export function updateProject(id: string, patch: Partial<OfferProject>) {
   cache = cache.map((p) => (p.id === id ? { ...p, ...patch } : p));
   notify();
   const { favorite, archived } = patch;
-  void updateProjectRow({ data: { id, patch: { favorite, archived } } });
+  void updateProjectRow({ data: { id, patch: { favorite, archived } } }).catch(
+    reportFailure("salvar a alteração"),
+  );
 }
 
 export function updateOffer(id: string, patch: Partial<GeneratedOffer>) {
@@ -65,13 +83,13 @@ export function updateOffer(id: string, patch: Partial<GeneratedOffer>) {
     return { ...p, offer: merged };
   });
   notify();
-  if (merged) void updateOfferRow({ data: { id, offer: merged } });
+  if (merged) void updateOfferRow({ data: { id, offer: merged } }).catch(reportFailure("salvar"));
 }
 
 export function deleteProject(id: string) {
   cache = cache.filter((p) => p.id !== id);
   notify();
-  void deleteOfferRow({ data: { id } });
+  void deleteOfferRow({ data: { id } }).catch(reportFailure("excluir a oferta"));
 }
 
 export function duplicateProject(id: string) {
@@ -86,7 +104,9 @@ export function duplicateProject(id: string) {
   };
   cache = [duplicated, ...cache];
   notify();
-  void duplicateOfferRow({ data: { sourceId: id, newId } });
+  void duplicateOfferRow({ data: { sourceId: id, newId } }).catch(
+    reportFailure("duplicar a oferta"),
+  );
 }
 
 export function useProjects() {

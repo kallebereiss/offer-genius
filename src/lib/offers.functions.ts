@@ -10,6 +10,7 @@ import {
   offerCoreSchema,
   landingSchema,
   offerResearchSchema,
+  offerValidationSchema,
   type Brief,
 } from "./offer-schema";
 
@@ -185,4 +186,45 @@ export const generateCopy = createServerFn({ method: "POST" })
     });
 
     return { text: await result.text };
+  });
+
+const validateOfferInput = z.object({
+  description: z.string().min(20),
+});
+
+export const validateOfferWithAi = createServerFn({ method: "POST" })
+  .inputValidator((input: unknown) => validateOfferInput.parse(input))
+  .handler(async ({ data }) => {
+    const key = process.env["LOVABLE_API_KEY"];
+    if (!key) throw new Error("Configuração de IA ausente.");
+
+    const gateway = createLovableAiGatewayProvider(key, undefined, { structuredOutputs: true });
+
+    const prompt = `Analise criticamente a oferta abaixo e devolva um diagnóstico honesto.
+Critérios obrigatórios (um item cada, nota 0-100): Clareza da promessa, Força da oferta, Preço e percepção de valor, Diferenciação, Urgência e escassez, Qualidade da copy.
+"total" é a média ponderada de 0 a 100. "verdict" é uma frase curta e direta sobre o potencial de venda.
+De 3 a 5 pontos fortes, 3 a 5 pontos fracos e 5 ações rápidas de melhoria. Reescreva a promessa principal e a headline em versões mais fortes.
+
+Oferta enviada pelo usuário:
+${data.description}`;
+
+    try {
+      const result = streamText({
+        model: gateway(AI_MODEL),
+        system: OFFER_SYSTEM_PROMPT,
+        prompt,
+        output: Output.object({ schema: offerValidationSchema }),
+      });
+      return await result.output;
+    } catch (error) {
+      if (NoObjectGeneratedError.isInstance(error)) {
+        try {
+          const raw = (error.text ?? "").replace(/^```json|```$/g, "").trim();
+          return offerValidationSchema.parse(JSON.parse(raw));
+        } catch {
+          throw new Error("A IA não conseguiu validar essa oferta. Tente novamente.");
+        }
+      }
+      throw error;
+    }
   });
