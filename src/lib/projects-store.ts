@@ -71,7 +71,9 @@ export function updateProject(id: string, patch: Partial<OfferProject>) {
   cache = cache.map((p) => (p.id === id ? { ...p, ...patch } : p));
   notify();
   const { favorite, archived } = patch;
-  void updateProjectRow({ data: { id, patch: { favorite, archived } } });
+  void updateProjectRow({ data: { id, patch: { favorite, archived } } }).catch(
+    reportFailure("salvar a alteração"),
+  );
 }
 
 export function updateOffer(id: string, patch: Partial<GeneratedOffer>) {
@@ -82,14 +84,15 @@ export function updateOffer(id: string, patch: Partial<GeneratedOffer>) {
     return { ...p, offer: merged };
   });
   notify();
-  if (merged) void updateOfferRow({ data: { id, offer: merged } });
+  if (merged) void updateOfferRow({ data: { id, offer: merged } }).catch(reportFailure("salvar"));
 }
 
 export function deleteProject(id: string) {
   cache = cache.filter((p) => p.id !== id);
   notify();
-  void deleteOfferRow({ data: { id } });
+  void deleteOfferRow({ data: { id } }).catch(reportFailure("excluir a oferta"));
 }
+
 
 export function duplicateProject(id: string) {
   const source = cache.find((p) => p.id === id);
